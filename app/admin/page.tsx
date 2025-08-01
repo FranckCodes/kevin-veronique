@@ -3,7 +3,16 @@
 import { useEffect, useState } from "react"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Users, Heart, UserCheck, Clock, MapPin, Edit2, Check, X, Trash2 } from "lucide-react"
+import { Users, Heart, UserCheck, Clock, MapPin, Edit2, Check, X, Trash2, Phone, Mail, User, Info } from "lucide-react"
+import {
+  Dialog,
+  DialogContent,
+  DialogHeader,
+  DialogTitle,
+  DialogDescription,
+  DialogFooter,
+  DialogClose
+} from "@/components/ui/dialog"
 
 export default function AdminPage() {
   const [guests, setGuests] = useState<any[]>([])
@@ -13,6 +22,7 @@ export default function AdminPage() {
   const [newSeat, setNewSeat] = useState({ id: "", label: "" })
   const [loadingSeats, setLoadingSeats] = useState(false)
   const [errorSeat, setErrorSeat] = useState("")
+  const [selectedGuest, setSelectedGuest] = useState<any | null>(null) // État pour la modale
 
   // Charger les invités et places
   useEffect(() => {
@@ -45,7 +55,6 @@ export default function AdminPage() {
       body: JSON.stringify({ selectedSeat: editing?.seat }),
     })
     setEditing(null)
-    // Reload guests
     fetch("/api/guests").then(res => res.json()).then(setGuests)
   }
 
@@ -57,7 +66,6 @@ export default function AdminPage() {
       setErrorSeat("ID et libellé obligatoires.")
       return
     }
-    // Vérifier unicité côté client
     if (seats.some(s => s.id === newSeat.id)) {
       setErrorSeat("Cette place existe déjà.")
       return
@@ -77,6 +85,10 @@ export default function AdminPage() {
     await fetch(`/api/seats/${id}`, { method: "DELETE" })
     fetchSeats()
   }
+
+  // Formatage de la date
+  const formatDate = (date: string) =>
+    new Date(date).toLocaleString("fr-FR", { dateStyle: "medium", timeStyle: "short" })
 
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-purple-50 py-8 px-4">
@@ -123,7 +135,6 @@ export default function AdminPage() {
                     <div key={seat.id} className="flex items-center gap-2 border rounded p-2 bg-white/90">
                       <span className="font-mono">{seat.id}</span>
                       <span>{seat.label}</span>
-                      {/* Supprimer une place (optionnel, décommente si tu veux activer) */}
                       {/* <Button
                         size="sm"
                         variant="ghost"
@@ -150,7 +161,12 @@ export default function AdminPage() {
           <CardContent>
             <div className="space-y-4">
               {guests.map(g =>
-                <div key={g.id} className="p-4 border rounded flex items-center justify-between">
+                <div
+                  key={g.id}
+                  className="p-4 border rounded flex items-center justify-between cursor-pointer hover:bg-rose-50"
+                  onClick={() => setSelectedGuest(g)}
+                  title="Afficher les détails"
+                >
                   <div>
                     <div className="font-semibold">{g.name}</div>
                     <div className="text-gray-500 text-sm">{g.guestCount > 1 ? `${g.guestCount} personnes` : "1 personne"}</div>
@@ -163,18 +179,19 @@ export default function AdminPage() {
                           value={editing.seat}
                           onChange={e => setEditing({ ...editing, seat: e.target.value })}
                           className="border rounded p-1"
+                          onClick={e => e.stopPropagation()} // Empêche l'ouverture de la modale si on clique dans le select
                         >
                           {seats.map(seat => (
                             <option key={seat.id} value={seat.id}>{seat.label}</option>
                           ))}
                         </select>
-                        <Button size="sm" onClick={() => handleSave(g.id)}><Check /></Button>
-                        <Button size="sm" variant="outline" onClick={() => setEditing(null)}><X /></Button>
+                        <Button size="sm" onClick={e => { e.stopPropagation(); handleSave(g.id); }}><Check /></Button>
+                        <Button size="sm" variant="outline" onClick={e => { e.stopPropagation(); setEditing(null); }}><X /></Button>
                       </>
                     ) : (
                       <>
                         <span>{seats.find(s => s.id === g.selectedSeat)?.label || g.selectedSeat}</span>
-                        <Button size="sm" variant="ghost" onClick={() => handleEdit(g.id, g.selectedSeat)}><Edit2 /></Button>
+                        <Button size="sm" variant="ghost" onClick={e => { e.stopPropagation(); handleEdit(g.id, g.selectedSeat); }}><Edit2 /></Button>
                       </>
                     )}
                   </div>
@@ -183,6 +200,75 @@ export default function AdminPage() {
             </div>
           </CardContent>
         </Card>
+
+        {/* Modale d'informations invité */}
+        <Dialog open={!!selectedGuest} onOpenChange={(open) => { if (!open) setSelectedGuest(null) }}>
+          <DialogContent className="max-w-lg">
+            {selectedGuest && (
+              <>
+                <DialogHeader>
+                  <DialogTitle>
+                    <Info className="inline mr-2" />
+                    Détail de l'invité
+                  </DialogTitle>
+                  <DialogDescription>
+                    Toutes les informations transmises lors de la confirmation.
+                  </DialogDescription>
+                </DialogHeader>
+                <div className="space-y-4 py-2">
+                  <div className="flex items-center gap-3">
+                    <User className="w-5 h-5" />
+                    <span className="font-bold">{selectedGuest.name}</span>
+                  </div>
+                  <div className="flex items-center gap-3">
+                    <Phone className="w-5 h-5" />
+                    <span>{selectedGuest.phone}</span>
+                  </div>
+                  {selectedGuest.attendanceType && (
+                    <div className="flex items-center gap-3">
+                      <Users className="w-5 h-5" />
+                      <span>{selectedGuest.attendanceType === "couple" ? "En couple" : "Seul(e)"} ({selectedGuest.guestCount} personne{selectedGuest.guestCount > 1 ? "s" : ""})</span>
+                    </div>
+                  )}
+                  {selectedGuest.partnerName && (
+                    <div className="flex items-center gap-3">
+                      <User className="w-5 h-5" />
+                      <span>Partenaire : {selectedGuest.partnerName}</span>
+                    </div>
+                  )}
+                  <div className="flex items-center gap-3">
+                    <MapPin className="w-5 h-5" />
+                    <span>
+                      Place : {seats.find(s => s.id === selectedGuest.selectedSeat)?.label || selectedGuest.selectedSeat}
+                    </span>
+                  </div>
+                  {selectedGuest.dietaryRestrictions && (
+                    <div className="flex items-center gap-3">
+                      <span className="font-semibold">Restrictions :</span>
+                      <span>{selectedGuest.dietaryRestrictions}</span>
+                    </div>
+                  )}
+                  {selectedGuest.message && (
+                    <div className="flex items-center gap-3">
+                      <span className="font-semibold">Message :</span>
+                      <span className="italic">{selectedGuest.message}</span>
+                    </div>
+                  )}
+                  <div className="flex items-center gap-3 text-xs text-gray-500">
+                    <Clock className="w-4 h-4" />
+                    <span>Confirmation : {formatDate(selectedGuest.submittedAt)}</span>
+                  </div>
+                </div>
+                <DialogFooter className="pt-2">
+                  <DialogClose asChild>
+                    <Button variant="outline">Fermer</Button>
+                  </DialogClose>
+                </DialogFooter>
+              </>
+            )}
+          </DialogContent>
+        </Dialog>
+
       </div>
     </div>
   )
