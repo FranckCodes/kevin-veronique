@@ -353,21 +353,6 @@ export default function AdminPage() {
             </TabsContent>
           </Tabs>
         </motion.div>
-
-        {/* Info */}
-        <motion.div
-          initial={{ y: 20, opacity: 0 }}
-          animate={{ y: 0, opacity: 1 }}
-          transition={{ duration: 0.6, delay: 0.6 }}
-          className="mt-8"
-        >
-          <Alert>
-            <Heart className="h-4 w-4" />
-            <AlertDescription>
-              Les invités sont automatiquement notifiés par email lorsque vous modifiez leur place.
-            </AlertDescription>
-          </Alert>
-        </motion.div>
       </div>
     </div>
   )
