@@ -168,7 +168,7 @@ export default function StoryPage() {
                 <div className="flex items-center justify-center mb-4">
                   <Heart className="w-8 h-8 fill-white mr-2" />
                   <Calendar className="w-6 h-6 mr-2" />
-                  <span className="text-xl font-semibold">15 Juin 2025</span>
+                  <span className="text-xl font-semibold">07 Août 2025</span>
                 </div>
                 <h3 className="text-3xl font-serif mb-4">Notre Grand Jour</h3>
                 <p className="text-lg leading-relaxed max-w-2xl mx-auto">

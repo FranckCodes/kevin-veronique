@@ -99,7 +99,7 @@ export default function RSVPPage() {
               </div>
               <h2 className="text-2xl font-serif text-gray-800 mb-4">Merci !</h2>
               <p className="text-gray-600 mb-6">
-                Votre confirmation a été reçue. Nous avons hâte de vous voir le 15 juin !
+                Votre confirmation a été reçue. Nous avons hâte de vous voir le 07 Août !
               </p>
               <Link href="/">
                 <Button className="bg-rose-500 hover:bg-rose-600 text-white">Retour à l'accueil</Button>

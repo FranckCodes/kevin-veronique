@@ -32,7 +32,7 @@ export default function DetailsPage() {
           className="text-center mb-8 md:mb-12"
         >
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif text-gray-800 mb-4">Détails de la Cérémonie</h1>
-          <p className="text-lg md:text-xl text-gray-600">Kevin & Véronique - 15 Juin 2025</p>
+          <p className="text-lg md:text-xl text-gray-600">Kevin & Véronique - 07 Août 2025</p>
         </motion.div>
 
         {/* Date & Time */}
