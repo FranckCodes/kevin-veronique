@@ -147,7 +147,7 @@ export default function RSVPPage() {
                 </div>
                 <div className="flex flex-col items-center">
                   <Clock className="w-5 h-5 md:w-6 md:h-6 text-rose-600 mb-2" />
-                  <p className="font-semibold text-gray-800 text-sm md:text-base">13h00</p>
+                  <p className="font-semibold text-gray-800 text-sm md:text-base">17h00</p>
                   <p className="text-xs md:text-sm text-gray-600">Cérémonie</p>
                 </div>
                 <div className="flex flex-col items-center">
