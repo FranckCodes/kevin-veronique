@@ -1,8 +1,6 @@
 "use client"
 
-import type React from "react"
-
-import { useState } from "react"
+import { useEffect, useState } from "react"
 import { motion } from "framer-motion"
 import { Heart, Users, User, MapPin, Calendar, Clock, ArrowLeft } from "lucide-react"
 import { Button } from "@/components/ui/button"
@@ -15,18 +13,10 @@ import { Alert, AlertDescription } from "@/components/ui/alert"
 import Link from "next/link"
 import { useSearchParams } from "next/navigation"
 
-const SEATS = [
-  { id: "A1", label: "Table A - Place 1", available: true },
-  { id: "A2", label: "Table A - Place 2", available: true },
-  { id: "A3", label: "Table A - Place 3", available: false },
-  { id: "A4", label: "Table A - Place 4", available: true },
-  { id: "B1", label: "Table B - Place 1", available: true },
-  { id: "B2", label: "Table B - Place 2", available: true },
-  { id: "B3", label: "Table B - Place 3", available: true },
-  { id: "B4", label: "Table B - Place 4", available: false },
-  { id: "C1", label: "Table C - Place 1", available: true },
-  { id: "C2", label: "Table C - Place 2", available: true },
-]
+interface Seat {
+  id: string
+  label: string
+}
 
 export default function RSVPPage() {
   const searchParams = useSearchParams()
@@ -41,7 +31,20 @@ export default function RSVPPage() {
   })
   const [isSubmitting, setIsSubmitting] = useState(false)
   const [showSuccess, setShowSuccess] = useState(false)
+  const [seats, setSeats] = useState<Seat[]>([])
+  const [guests, setGuests] = useState<any[]>([])
+  const [seatUnavailable, setSeatUnavailable] = useState<string[]>([])
 
+  // Charger dynamiquement les places & invités déjà enregistrés
+  useEffect(() => {
+    fetch("/api/seats").then(res => res.json()).then(setSeats)
+    fetch("/api/guests").then(res => res.json()).then(data => {
+      setGuests(data)
+      setSeatUnavailable(data.map((g: any) => g.selectedSeat))
+    })
+  }, [])
+
+  // Gestion des champs
   const handleInputChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({
       ...formData,
@@ -57,27 +60,28 @@ export default function RSVPPage() {
     })
   }
 
+  // Envoi du formulaire à l'API (POST)
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault()
     setIsSubmitting(true)
-
-    // Simulation d'envoi
-    await new Promise((resolve) => setTimeout(resolve, 2000))
-
-    // Sauvegarder dans localStorage pour simulation
-    const guestData = {
-      ...formData,
-      id: Date.now(),
-      submittedAt: new Date().toISOString(),
-      guestCount: formData.attendanceType === "couple" ? 2 : 1,
-    }
-
-    const existingGuests = JSON.parse(localStorage.getItem("wedding-guests") || "[]")
-    existingGuests.push(guestData)
-    localStorage.setItem("wedding-guests", JSON.stringify(existingGuests))
-
+    const guestCount = formData.attendanceType === "couple" ? 2 : 1
+    const res = await fetch("/api/guests", {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        name: formData.name,
+        phone: formData.phone,
+        message: formData.message,
+        attendanceType: formData.attendanceType,
+        partnerName: formData.partnerName,
+        selectedSeat: formData.selectedSeat,
+        dietaryRestrictions: formData.dietaryRestrictions,
+        guestCount,
+      }),
+    })
     setIsSubmitting(false)
-    setShowSuccess(true)
+    if (res.ok) setShowSuccess(true)
+    else alert("Erreur lors de la confirmation. Réessaie.")
   }
 
   if (showSuccess) {
@@ -168,7 +172,7 @@ export default function RSVPPage() {
             </CardHeader>
             <CardContent className="p-6">
               <form onSubmit={handleSubmit} className="space-y-6">
-                {/* Informations personnelles */}
+                {/* Infos personnelles */}
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div>
                     <Label htmlFor="name" className="text-sm md:text-base">
@@ -198,8 +202,6 @@ export default function RSVPPage() {
                     />
                   </div>
                 </div>
-
-
 
                 {/* Type de participation */}
                 <div>
@@ -259,11 +261,13 @@ export default function RSVPPage() {
                       className="mt-1 w-full p-2 border border-gray-300 rounded-md focus:ring-2 focus:ring-rose-500 focus:border-rose-500"
                     >
                       <option value="">Sélectionnez votre place</option>
-                      {SEATS.filter((seat) => seat.available).map((seat) => (
-                        <option key={seat.id} value={seat.id}>
-                          {seat.label}
-                        </option>
-                      ))}
+                      {seats
+                        .filter((seat) => !seatUnavailable.includes(seat.id))
+                        .map((seat) => (
+                          <option key={seat.id} value={seat.id}>
+                            {seat.label}
+                          </option>
+                        ))}
                     </select>
                   </motion.div>
                 )}

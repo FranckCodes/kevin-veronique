@@ -11,7 +11,7 @@ import { useState } from "react"
 const galleryImages = Array.from({ length: 21 }, (_, index) => {
   const id = index + 1
   const category = id % 3 === 0 ? "lifestyle" : id % 2 === 0 ? "engagement" : "couple"
-  const src = `/images/couple-photo-${id}.jpg` // Assure-toi que ces fichiers existent
+  const src = `/images/couple-photo-${id}.jpg` // Assure-toi que ces fichiers existent oui oui 
   return {
     id,
     src,
