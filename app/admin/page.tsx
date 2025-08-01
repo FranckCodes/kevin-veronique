@@ -1,6 +1,7 @@
 "use client"
 
 import { useEffect, useState } from "react"
+import { useRouter } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
 import { Users, Heart, UserCheck, Clock, MapPin, Edit2, Check, X, Trash2, Phone, Mail, User, Info } from "lucide-react"
@@ -33,6 +34,9 @@ export default function AdminPage() {
   const [loadingSeats, setLoadingSeats] = useState(false)
   const [errorSeat, setErrorSeat] = useState("")
   const [selectedGuest, setSelectedGuest] = useState<any | null>(null)
+
+  const router = useRouter()
+
 
   // Charger les invités et places
   useEffect(() => {
@@ -196,17 +200,18 @@ export default function AdminPage() {
       <div className="container mx-auto max-w-5xl">
         <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
           <h1 className="text-4xl font-serif text-gray-800 text-center flex-1">Dashboard Mariage</h1>
-          <Button
-            variant="outline"
-            className="w-full md:w-auto"
-            onClick={() => {
-              localStorage.removeItem("wedding-admin-auth")
-              window.location.reload()
-            }}
-            title="Déconnexion"
-          >
-            Déconnexion
-          </Button>
+            <Button
+              variant="outline"
+              className="w-full md:w-auto"
+              onClick={() => {
+                localStorage.removeItem("wedding-admin-auth")
+                router.push("/")
+              }}
+              title="Déconnexion"
+            >
+              Déconnexion
+            </Button>
+
         </div>
 
 
