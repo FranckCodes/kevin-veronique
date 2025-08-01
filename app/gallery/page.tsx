@@ -11,10 +11,7 @@ import { useState } from "react"
 const galleryImages = Array.from({ length: 21 }, (_, index) => {
   const id = index + 1
   const category = id % 3 === 0 ? "lifestyle" : id % 2 === 0 ? "engagement" : "couple"
-  const src =
-    id <= 7
-      ? `/images/couple-photo-${id}.jpg`
-      : `/images/couple-${id - 6}.jpg` // from 8 to 21
+  const src = `/images/couple-photo-${id}.jpg` // Assure-toi que ces fichiers existent
   return {
     id,
     src,
@@ -126,6 +123,7 @@ export default function GalleryPage() {
                         <a
                           href={image.src}
                           download
+                          target="_blank"
                           onClick={(e) => e.stopPropagation()}
                           className="bg-white/90 rounded-md p-2 hover:bg-white"
                         >
@@ -173,7 +171,13 @@ export default function GalleryPage() {
               <Download className="w-8 h-8 text-rose-600 mx-auto mb-4" />
               <h3 className="text-xl font-serif text-gray-800 mb-2">Télécharger nos photos</h3>
               <p className="text-gray-600 mb-4">Gardez nos plus beaux souvenirs avec vous</p>
-              <Button className="bg-rose-500 hover:bg-rose-600 text-white">Télécharger l'album complet</Button>
+              <a
+                href="/downloads/album-veronique-kevin.zip"
+                download
+                className="bg-rose-500 hover:bg-rose-600 text-white inline-block px-6 py-2 rounded-md font-medium"
+              >
+                Télécharger l'album complet
+              </a>
             </CardContent>
           </Card>
         </motion.div>
