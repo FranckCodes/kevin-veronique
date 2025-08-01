@@ -17,7 +17,7 @@ import {
 export default function AdminPage() {
   const [guests, setGuests] = useState<any[]>([])
   const [seats, setSeats] = useState<any[]>([])
-  const [editing, setEditing] = useState<{ id: number; seat: string } | null>(null)
+  const [editing, setEditing] = useState<{ id: number; seat: string } | any>(null)
   const [stats, setStats] = useState({ total: 0, totalPeople: 0, couples: 0, solos: 0 })
   const [newSeat, setNewSeat] = useState({ id: "", label: "" })
   const [loadingSeats, setLoadingSeats] = useState(false)
