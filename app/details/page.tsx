@@ -32,7 +32,7 @@ export default function DetailsPage() {
           className="text-center mb-8 md:mb-12"
         >
           <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif text-gray-800 mb-4">Détails de la Cérémonie</h1>
-          <p className="text-lg md:text-xl text-gray-600">Kevin & Véronique - 15 Juin 2025</p>
+          <p className="text-lg md:text-xl text-gray-600">Kevin & Véronique - 07 Août 2025</p>
         </motion.div>
 
         {/* Date & Time */}
@@ -171,43 +171,38 @@ export default function DetailsPage() {
         >
           <Card className="bg-white/90 backdrop-blur-sm border-rose-200 shadow-xl">
             <CardHeader>
-              <CardTitle className="text-2xl font-serif text-gray-800 text-center">Programme de la Journée</CardTitle>
+              <CardTitle className="text-2xl font-serif text-gray-800 text-center">
+                Programme de la Soirée
+              </CardTitle>
             </CardHeader>
             <CardContent className="p-8">
               <div className="space-y-6">
                 <div className="flex items-center space-x-4 p-4 bg-rose-50 rounded-lg">
                   <Clock className="w-6 h-6 text-rose-600" />
                   <div>
-                    <h4 className="font-semibold text-gray-800">16h00 - Cérémonie</h4>
-                    <p className="text-gray-600">Échange des vœux dans les jardins du château</p>
+                    <h4 className="font-semibold text-gray-800">19h00 - Ouverture de la soirée</h4>
+                    <p className="text-gray-600">Accueil des invités & installation</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-4 p-4 bg-rose-50 rounded-lg">
-                  <Camera className="w-6 h-6 text-rose-600" />
+                  <Gift className="w-6 h-6 text-rose-600" />
                   <div>
-                    <h4 className="font-semibold text-gray-800">17h00 - Photos</h4>
-                    <p className="text-gray-600">Séance photo avec les familles et amis</p>
-                  </div>
-                </div>
-                <div className="flex items-center space-x-4 p-4 bg-rose-50 rounded-lg">
-                  <Utensils className="w-6 h-6 text-rose-600" />
-                  <div>
-                    <h4 className="font-semibold text-gray-800">17h30 - Cocktail</h4>
-                    <p className="text-gray-600">Apéritif et amuse-bouches dans les jardins</p>
+                    <h4 className="font-semibold text-gray-800">20h00 - Entrée des mariés</h4>
+                    <p className="text-gray-600">Arrivée et présentation officielle du couple</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-4 p-4 bg-rose-50 rounded-lg">
                   <Utensils className="w-6 h-6 text-rose-600" />
                   <div>
-                    <h4 className="font-semibold text-gray-800">19h30 - Dîner</h4>
-                    <p className="text-gray-600">Repas gastronomique dans la salle de réception</p>
+                    <h4 className="font-semibold text-gray-800">22h00 - Dîner</h4>
+                    <p className="text-gray-600">Repas festif & partages autour de la table</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-4 p-4 bg-rose-50 rounded-lg">
                   <Music className="w-6 h-6 text-rose-600" />
                   <div>
-                    <h4 className="font-semibold text-gray-800">22h00 - Soirée dansante</h4>
-                    <p className="text-gray-600">Musique et danse jusqu'au bout de la nuit</p>
+                    <h4 className="font-semibold text-gray-800">Après le dîner - Ambiance & danse</h4>
+                    <p className="text-gray-600">Place à la fête : dansons jusqu’à 02h00 du matin !</p>
                   </div>
                 </div>
               </div>

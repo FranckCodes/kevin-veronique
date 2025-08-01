@@ -99,7 +99,7 @@ export default function RSVPPage() {
               </div>
               <h2 className="text-2xl font-serif text-gray-800 mb-4">Merci !</h2>
               <p className="text-gray-600 mb-6">
-                Votre confirmation a été reçue. Nous avons hâte de vous voir le 15 juin !
+                Votre confirmation a été reçue. Nous avons hâte de vous voir le 07 Août !
               </p>
               <Link href="/">
                 <Button className="bg-rose-500 hover:bg-rose-600 text-white">Retour à l'accueil</Button>
@@ -147,7 +147,7 @@ export default function RSVPPage() {
                 </div>
                 <div className="flex flex-col items-center">
                   <Clock className="w-5 h-5 md:w-6 md:h-6 text-rose-600 mb-2" />
-                  <p className="font-semibold text-gray-800 text-sm md:text-base">13h00</p>
+                  <p className="font-semibold text-gray-800 text-sm md:text-base">17h00</p>
                   <p className="text-xs md:text-sm text-gray-600">Cérémonie</p>
                 </div>
                 <div className="flex flex-col items-center">

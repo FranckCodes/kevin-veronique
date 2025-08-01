@@ -15,6 +15,16 @@ import {
 } from "@/components/ui/dialog"
 
 export default function AdminPage() {
+  // Tous les hooks D'ABORD
+  const [auth, setAuth] = useState(
+    typeof window !== "undefined" && localStorage.getItem("wedding-admin-auth") === "OK"
+  )
+  const [modalOpen, setModalOpen] = useState(!auth)
+  const [phone, setPhone] = useState("")
+  const [codeSent, setCodeSent] = useState(false)
+  const [code, setCode] = useState("")
+  const [codeLoading, setCodeLoading] = useState(false)
+  const [codeError, setCodeError] = useState("")
   const [guests, setGuests] = useState<any[]>([])
   const [seats, setSeats] = useState<any[]>([])
   const [editing, setEditing] = useState<{ id: number; seat: string } | any>(null)
@@ -22,13 +32,15 @@ export default function AdminPage() {
   const [newSeat, setNewSeat] = useState({ id: "", label: "" })
   const [loadingSeats, setLoadingSeats] = useState(false)
   const [errorSeat, setErrorSeat] = useState("")
-  const [selectedGuest, setSelectedGuest] = useState<any | null>(null) // État pour la modale
+  const [selectedGuest, setSelectedGuest] = useState<any | null>(null)
 
   // Charger les invités et places
   useEffect(() => {
-    fetch("/api/guests").then(res => res.json()).then(setGuests)
-    fetchSeats()
-  }, [])
+    if (auth) {
+      fetch("/api/guests").then(res => res.json()).then(setGuests)
+      fetchSeats()
+    }
+  }, [auth])
 
   const fetchSeats = () => {
     setLoadingSeats(true)
@@ -90,10 +102,113 @@ export default function AdminPage() {
   const formatDate = (date: string) =>
     new Date(date).toLocaleString("fr-FR", { dateStyle: "medium", timeStyle: "short" })
 
+  // JSX pour la modal d'auth
+  const authModal = (
+    <Dialog open={modalOpen}>
+      <DialogContent className="max-w-xs">
+        <DialogHeader>
+          <DialogTitle>Authentification admin</DialogTitle>
+          <DialogDescription>
+            Saisis ton numéro WhatsApp autorisé pour recevoir un code d’accès.
+          </DialogDescription>
+        </DialogHeader>
+
+        {!codeSent ? (
+          <>
+            <input
+              className="border rounded p-2 w-full mb-2"
+              placeholder="Numéro WhatsApp (ex: +243...)"
+              value={phone}
+              onChange={e => setPhone(e.target.value)}
+              autoFocus
+            />
+            <Button
+              className="w-full bg-rose-500 hover:bg-rose-600 text-white"
+              onClick={async () => {
+                setCodeLoading(true)
+                setCodeError("")
+                const res = await fetch("/api/admin/send-code", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ phone }),
+                })
+                if (res.ok) {
+                  setCodeSent(true)
+                } else {
+                  const data = await res.json()
+                  setCodeError(data?.error || "Numéro non autorisé ou erreur d'envoi.")
+                }
+                setCodeLoading(false)
+              }}
+              disabled={codeLoading || !phone.trim()}
+            >
+              {codeLoading ? "Envoi..." : "Recevoir le code"}
+            </Button>
+            {codeError && <div className="text-red-600 mt-2">{codeError}</div>}
+          </>
+        ) : (
+          <>
+            <input
+              className="border rounded p-2 w-full mb-2"
+              placeholder="Code reçu"
+              value={code}
+              onChange={e => setCode(e.target.value)}
+            />
+            <Button
+              className="w-full bg-rose-500 hover:bg-rose-600 text-white"
+              onClick={async () => {
+                setCodeLoading(true)
+                setCodeError("")
+                const res = await fetch("/api/admin/verify-code", {
+                  method: "POST",
+                  headers: { "Content-Type": "application/json" },
+                  body: JSON.stringify({ phone, code }),
+                })
+                if (res.ok) {
+                  setAuth(true)
+                  setModalOpen(false)
+                  localStorage.setItem("wedding-admin-auth", "OK")
+                } else {
+                  const data = await res.json()
+                  setCodeError(data?.error || "Code incorrect.")
+                }
+                setCodeLoading(false)
+              }}
+              disabled={codeLoading || !code.trim()}
+            >
+              {codeLoading ? "Vérification..." : "Valider"}
+            </Button>
+            {codeError && <div className="text-red-600 mt-2">{codeError}</div>}
+            <Button variant="ghost" className="mt-2" onClick={() => { setCodeSent(false); setCode(""); }}>
+              <span className="text-sm">Renvoyer un code</span>
+            </Button>
+          </>
+        )}
+      </DialogContent>
+    </Dialog>
+  )
+
+  // Render logique : d'abord la modal si pas auth, sinon l'admin complet
+  if (!auth) return authModal
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-purple-50 py-8 px-4">
       <div className="container mx-auto max-w-5xl">
-        <h1 className="text-4xl font-serif text-gray-800 mb-6 text-center">Dashboard Mariage</h1>
+        <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
+          <h1 className="text-4xl font-serif text-gray-800 text-center flex-1">Dashboard Mariage</h1>
+          <Button
+            variant="outline"
+            className="w-full md:w-auto"
+            onClick={() => {
+              localStorage.removeItem("wedding-admin-auth")
+              window.location.reload()
+            }}
+            title="Déconnexion"
+          >
+            Déconnexion
+          </Button>
+        </div>
+
 
         {/* Stats */}
         <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
@@ -179,7 +294,7 @@ export default function AdminPage() {
                           value={editing.seat}
                           onChange={e => setEditing({ ...editing, seat: e.target.value })}
                           className="border rounded p-1"
-                          onClick={e => e.stopPropagation()} // Empêche l'ouverture de la modale si on clique dans le select
+                          onClick={e => e.stopPropagation()}
                         >
                           {seats.map(seat => (
                             <option key={seat.id} value={seat.id}>{seat.label}</option>
@@ -268,7 +383,6 @@ export default function AdminPage() {
             )}
           </DialogContent>
         </Dialog>
-
       </div>
     </div>
   )
