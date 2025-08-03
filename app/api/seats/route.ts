@@ -1,20 +1,22 @@
 // app/api/seats/route.ts
-import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-
-export async function GET() {
-  const seats = await prisma.seat.findMany();
-  return NextResponse.json(seats);
-}
+import { NextRequest, NextResponse } from "next/server"
+import { prisma } from "@/lib/prisma"
 
 export async function POST(request: NextRequest) {
-  const body = await request.json();
-  const { id, label } = body;
-  if (!id || !label) {
-    return NextResponse.json({ error: "Données manquantes" }, { status: 400 });
+  try {
+    const body = await request.json()
+    const { label, tableId } = body
+    if (!label || !tableId) return NextResponse.json({ error: "Champs requis" }, { status: 400 })
+
+    const seat = await prisma.seat.create({
+      data: {
+        label,
+        tableId: Number(tableId),
+      }
+    })
+    return NextResponse.json(seat, { status: 201 })
+  } catch (err) {
+    console.error("POST /api/seats", err)
+    return NextResponse.json({ error: "Erreur serveur" }, { status: 500 })
   }
-  const seat = await prisma.seat.create({
-    data: { id, label },
-  });
-  return NextResponse.json(seat, { status: 201 });
 }

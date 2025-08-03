@@ -4,19 +4,27 @@ import { useEffect, useState } from "react"
 import { useRouter } from "next/navigation"
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import { Button } from "@/components/ui/button"
-import { Users, Heart, UserCheck, Clock, MapPin, Edit2, Check, X, Trash2, Phone, Mail, User, Info } from "lucide-react"
-import {
-  Dialog,
-  DialogContent,
-  DialogHeader,
-  DialogTitle,
-  DialogDescription,
-  DialogFooter,
-  DialogClose
-} from "@/components/ui/dialog"
+import { Plus, Trash2, Edit2, Check, X, Users, MapPin, Info } from "lucide-react"
+import { Dialog, DialogContent, DialogHeader, DialogTitle, DialogDescription, DialogFooter, DialogClose } from "@/components/ui/dialog"
+import { Input } from "@/components/ui/input"
+import GuestEditDialog from "@/components/GuestEditDialog"
+
+type Table = {
+  id: number
+  name: string
+  seats: { id: number; label: string; guest: any[] }[]
+}
+
+type Guest = {
+  id: number
+  name: string
+  phone: string
+  seatId?: number | null
+  seat?: { id: number; label: string; table: { name: string } }
+}
 
 export default function AdminPage() {
-  // Tous les hooks D'ABORD
+  // Auth (réutilise ta logique à code)
   const [auth, setAuth] = useState(
     typeof window !== "undefined" && localStorage.getItem("wedding-admin-auth") === "OK"
   )
@@ -26,294 +34,216 @@ export default function AdminPage() {
   const [code, setCode] = useState("")
   const [codeLoading, setCodeLoading] = useState(false)
   const [codeError, setCodeError] = useState("")
-  const [guests, setGuests] = useState<any[]>([])
-  const [seats, setSeats] = useState<any[]>([])
-  const [editing, setEditing] = useState<{ id: number; seat: string } | any>(null)
-  const [stats, setStats] = useState({ total: 0, totalPeople: 0, couples: 0, solos: 0 })
-  const [newSeat, setNewSeat] = useState({ id: "", label: "" })
-  const [loadingSeats, setLoadingSeats] = useState(false)
-  const [errorSeat, setErrorSeat] = useState("")
-  const [selectedGuest, setSelectedGuest] = useState<any | null>(null)
-
   const router = useRouter()
 
+  // Admin data
+  const [tables, setTables] = useState<Table[]>([])
+  const [guests, setGuests] = useState<Guest[]>([])
+  const [selectedTable, setSelectedTable] = useState<number | null>(null)
+  const [newTable, setNewTable] = useState("")
+  const [newSeat, setNewSeat] = useState({ tableId: 0, label: "" })
+  const [loading, setLoading] = useState(false)
+  const [selectedGuest, setSelectedGuest] = useState<Guest | null>(null)
+  const [editingGuest, setEditingGuest] = useState<Guest | null>(null)
 
-  // Charger les invités et places
+
+
+  // Fetch data
   useEffect(() => {
-    if (auth) {
-      fetch("/api/guests").then(res => res.json()).then(setGuests)
-      fetchSeats()
-    }
+    if (!auth) return
+    setLoading(true)
+    Promise.all([
+      fetch("/api/tables").then(r => r.json()),
+      fetch("/api/guests").then(r => r.json()),
+    ]).then(([tables, guests]) => {
+      setTables(tables)
+      setGuests(guests)
+    }).finally(() => setLoading(false))
   }, [auth])
 
-  const fetchSeats = () => {
-    setLoadingSeats(true)
-    fetch("/api/seats")
-      .then(res => res.json())
-      .then(setSeats)
-      .finally(() => setLoadingSeats(false))
-  }
+    // Auth modal
+    const authModal = (
+      <Dialog open={modalOpen}>
+        <DialogContent className="max-w-xs">
+          <DialogHeader>
+            <DialogTitle>Authentification admin</DialogTitle>
+            <DialogDescription>
+              Saisis ton numéro WhatsApp autorisé pour recevoir un code d’accès.
+            </DialogDescription>
+          </DialogHeader>
+          {!codeSent ? (
+            <>
+              <input className="border rounded p-2 w-full mb-2" placeholder="Numéro WhatsApp (ex: +243...)" value={phone} onChange={e => setPhone(e.target.value)} autoFocus />
+              <Button
+                className="w-full bg-rose-500 hover:bg-rose-600 text-white"
+                onClick={async () => {
+                  setCodeLoading(true)
+                  setCodeError("")
+                  const res = await fetch("/api/admin/send-code", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ phone }),
+                  })
+                  if (res.ok) setCodeSent(true)
+                  else setCodeError((await res.json())?.error || "Erreur d'envoi.")
+                  setCodeLoading(false)
+                }}
+                disabled={codeLoading || !phone.trim()}
+              >
+                {codeLoading ? "Envoi..." : "Recevoir le code"}
+              </Button>
+              {codeError && <div className="text-red-600 mt-2">{codeError}</div>}
+            </>
+          ) : (
+            <>
+              <input className="border rounded p-2 w-full mb-2" placeholder="Code reçu" value={code} onChange={e => setCode(e.target.value)} />
+              <Button
+                className="w-full bg-rose-500 hover:bg-rose-600 text-white"
+                onClick={async () => {
+                  setCodeLoading(true)
+                  setCodeError("")
+                  const res = await fetch("/api/admin/verify-code", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/json" },
+                    body: JSON.stringify({ phone, code }),
+                  })
+                  if (res.ok) {
+                    setAuth(true)
+                    setModalOpen(false)
+                    localStorage.setItem("wedding-admin-auth", "OK")
+                  } else setCodeError((await res.json())?.error || "Code incorrect.")
+                  setCodeLoading(false)
+                }}
+                disabled={codeLoading || !code.trim()}
+              >
+                {codeLoading ? "Vérification..." : "Valider"}
+              </Button>
+              {codeError && <div className="text-red-600 mt-2">{codeError}</div>}
+              <Button variant="ghost" className="mt-2" onClick={() => { setCodeSent(false); setCode(""); }}>
+                <span className="text-sm">Renvoyer un code</span>
+              </Button>
+            </>
+          )}
+        </DialogContent>
+      </Dialog>
+    )
+    if (!auth) return authModal
 
-  useEffect(() => {
-    setStats({
-      total: guests.length,
-      totalPeople: guests.reduce((s, g) => s + g.guestCount, 0),
-      couples: guests.filter(g => g.guestCount > 1).length,
-      solos: guests.filter(g => g.guestCount === 1).length,
-    })
-  }, [guests])
-
-  const handleEdit = (id: number, seat: string) => setEditing({ id, seat })
-  const handleSave = async (id: number) => {
-    await fetch(`/api/guests/${id}`, {
-      method: "PUT",
+  // CRUD Tables
+  const addTable = async () => {
+    if (!newTable.trim()) return
+    setLoading(true)
+    await fetch("/api/tables", {
+      method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ selectedSeat: editing?.seat }),
+      body: JSON.stringify({ name: newTable }),
     })
-    setEditing(null)
-    fetch("/api/guests").then(res => res.json()).then(setGuests)
+    setNewTable("")
+    const tables = await fetch("/api/tables").then(r => r.json())
+    setTables(tables)
+    setLoading(false)
   }
 
-  // Ajouter une nouvelle place
-  const handleNewSeat = async (e: React.FormEvent) => {
-    e.preventDefault()
-    setErrorSeat("")
-    if (!newSeat.id.trim() || !newSeat.label.trim()) {
-      setErrorSeat("ID et libellé obligatoires.")
-      return
-    }
-    if (seats.some(s => s.id === newSeat.id)) {
-      setErrorSeat("Cette place existe déjà.")
-      return
-    }
+  // CRUD Seats
+  const addSeat = async (tableId: number) => {
+    if (!newSeat.label.trim() || !tableId) return
+    setLoading(true)
     await fetch("/api/seats", {
       method: "POST",
       headers: { "Content-Type": "application/json" },
-      body: JSON.stringify(newSeat),
+      body: JSON.stringify({ label: newSeat.label, tableId }),
     })
-    setNewSeat({ id: "", label: "" })
-    fetchSeats()
+    setNewSeat({ tableId: 0, label: "" })
+    const tables = await fetch("/api/tables").then(r => r.json())
+    setTables(tables)
+    setLoading(false)
   }
 
-  // Supprimer une place (optionnel)
-  const handleDeleteSeat = async (id: string) => {
-    if (!confirm("Supprimer cette place ?")) return
-    await fetch(`/api/seats/${id}`, { method: "DELETE" })
-    fetchSeats()
-  }
-
-  // Formatage de la date
-  const formatDate = (date: string) =>
-    new Date(date).toLocaleString("fr-FR", { dateStyle: "medium", timeStyle: "short" })
-
-  // JSX pour la modal d'auth
-  const authModal = (
-    <Dialog open={modalOpen}>
-      <DialogContent className="max-w-xs">
-        <DialogHeader>
-          <DialogTitle>Authentification admin</DialogTitle>
-          <DialogDescription>
-            Saisis ton numéro WhatsApp autorisé pour recevoir un code d’accès.
-          </DialogDescription>
-        </DialogHeader>
-
-        {!codeSent ? (
-          <>
-            <input
-              className="border rounded p-2 w-full mb-2"
-              placeholder="Numéro WhatsApp (ex: +243...)"
-              value={phone}
-              onChange={e => setPhone(e.target.value)}
-              autoFocus
-            />
-            <Button
-              className="w-full bg-rose-500 hover:bg-rose-600 text-white"
-              onClick={async () => {
-                setCodeLoading(true)
-                setCodeError("")
-                const res = await fetch("/api/admin/send-code", {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ phone }),
-                })
-                if (res.ok) {
-                  setCodeSent(true)
-                } else {
-                  const data = await res.json()
-                  setCodeError(data?.error || "Numéro non autorisé ou erreur d'envoi.")
-                }
-                setCodeLoading(false)
-              }}
-              disabled={codeLoading || !phone.trim()}
-            >
-              {codeLoading ? "Envoi..." : "Recevoir le code"}
-            </Button>
-            {codeError && <div className="text-red-600 mt-2">{codeError}</div>}
-          </>
-        ) : (
-          <>
-            <input
-              className="border rounded p-2 w-full mb-2"
-              placeholder="Code reçu"
-              value={code}
-              onChange={e => setCode(e.target.value)}
-            />
-            <Button
-              className="w-full bg-rose-500 hover:bg-rose-600 text-white"
-              onClick={async () => {
-                setCodeLoading(true)
-                setCodeError("")
-                const res = await fetch("/api/admin/verify-code", {
-                  method: "POST",
-                  headers: { "Content-Type": "application/json" },
-                  body: JSON.stringify({ phone, code }),
-                })
-                if (res.ok) {
-                  setAuth(true)
-                  setModalOpen(false)
-                  localStorage.setItem("wedding-admin-auth", "OK")
-                } else {
-                  const data = await res.json()
-                  setCodeError(data?.error || "Code incorrect.")
-                }
-                setCodeLoading(false)
-              }}
-              disabled={codeLoading || !code.trim()}
-            >
-              {codeLoading ? "Vérification..." : "Valider"}
-            </Button>
-            {codeError && <div className="text-red-600 mt-2">{codeError}</div>}
-            <Button variant="ghost" className="mt-2" onClick={() => { setCodeSent(false); setCode(""); }}>
-              <span className="text-sm">Renvoyer un code</span>
-            </Button>
-          </>
-        )}
-      </DialogContent>
-    </Dialog>
-  )
-
-  // Render logique : d'abord la modal si pas auth, sinon l'admin complet
-  if (!auth) return authModal
-
+  // --- Admin interface ---
   return (
     <div className="min-h-screen bg-gradient-to-br from-rose-50 via-pink-50 to-purple-50 py-8 px-4">
       <div className="container mx-auto max-w-5xl">
+
+        {/* HEADER + LOGOUT */}
         <div className="flex flex-col md:flex-row justify-between items-center mb-6 gap-4">
           <h1 className="text-4xl font-serif text-gray-800 text-center flex-1">Dashboard Mariage</h1>
-            <Button
-              variant="outline"
-              className="w-full md:w-auto"
-              onClick={() => {
-                localStorage.removeItem("wedding-admin-auth")
-                router.push("/")
-              }}
-              title="Déconnexion"
-            >
-              Déconnexion
-            </Button>
-
+          <Button
+            variant="outline"
+            className="w-full md:w-auto"
+            onClick={() => {
+              localStorage.removeItem("wedding-admin-auth")
+              router.push("/")
+            }}
+          >
+            Déconnexion
+          </Button>
         </div>
 
-
-        {/* Stats */}
-        <div className="grid grid-cols-2 md:grid-cols-4 gap-4 mb-8">
-          <Card><CardContent className="text-center p-4"><Users className="mx-auto mb-2"/>{stats.total} invités</CardContent></Card>
-          <Card><CardContent className="text-center p-4"><Heart className="mx-auto mb-2"/>{stats.totalPeople} personnes</CardContent></Card>
-          <Card><CardContent className="text-center p-4"><UserCheck className="mx-auto mb-2"/>{stats.solos} solos</CardContent></Card>
-          <Card><CardContent className="text-center p-4"><Clock className="mx-auto mb-2"/>{stats.couples} groupes</CardContent></Card>
-        </div>
-
-        {/* Formulaire de création de place */}
+        {/* TABLES CRUD */}
         <Card className="mb-8">
           <CardHeader>
-            <CardTitle>Créer une nouvelle place / table</CardTitle>
+            <CardTitle>Créer une Table</CardTitle>
           </CardHeader>
           <CardContent>
-            <form className="flex gap-2 flex-col md:flex-row items-center" onSubmit={handleNewSeat}>
-              <input
-                required placeholder="Ex: A1" className="border rounded p-2 w-32"
-                value={newSeat.id}
-                onChange={e => setNewSeat(ns => ({ ...ns, id: e.target.value }))}
-              />
-              <input
-                required placeholder="Libellé (ex: Table A - Place 1)" className="border rounded p-2 flex-1"
-                value={newSeat.label}
-                onChange={e => setNewSeat(ns => ({ ...ns, label: e.target.value }))}
-              />
-              <Button type="submit" className="bg-rose-500 hover:bg-rose-600 text-white w-full md:w-auto">Ajouter</Button>
+            <form
+              className="flex flex-col md:flex-row items-center gap-2"
+              onSubmit={e => { e.preventDefault(); addTable() }}
+            >
+              <Input placeholder="Nom de la table (ex: VIP, Famille B...)" value={newTable} onChange={e => setNewTable(e.target.value)} />
+              <Button type="submit" className="bg-rose-500 hover:bg-rose-600 text-white">Ajouter</Button>
             </form>
-            {errorSeat && <div className="text-red-600 mt-2">{errorSeat}</div>}
-
-            {/* Liste dynamique des places */}
-            <div className="mt-6">
-              <h3 className="font-semibold mb-2 text-gray-700">Places existantes :</h3>
-              {loadingSeats ? (
-                <div>Chargement…</div>
-              ) : (
-                <div className="grid grid-cols-2 md:grid-cols-4 gap-2">
-                  {seats.map(seat =>
-                    <div key={seat.id} className="flex items-center gap-2 border rounded p-2 bg-white/90">
-                      <span className="font-mono">{seat.id}</span>
-                      <span>{seat.label}</span>
-                      {/* <Button
-                        size="sm"
-                        variant="ghost"
-                        className="text-red-600"
-                        onClick={() => handleDeleteSeat(seat.id)}
-                        title="Supprimer"
-                      >
-                        <Trash2 className="w-4 h-4" />
-                      </Button> */}
-                    </div>
-                  )}
-                  {seats.length === 0 && <div className="text-gray-400">Aucune place créée.</div>}
-                </div>
-              )}
-            </div>
           </CardContent>
         </Card>
 
-        {/* Liste des invités */}
+        {/* SEATS PAR TABLE */}
+        <div className="grid md:grid-cols-2 gap-6 mb-10">
+          {tables.map(table => (
+            <Card key={table.id} className="bg-white/90 shadow">
+              <CardHeader>
+                <CardTitle>{table.name}</CardTitle>
+              </CardHeader>
+              <CardContent>
+                {/* Ajout de place */}
+                <form className="flex gap-2 mb-3" onSubmit={e => { e.preventDefault(); addSeat(table.id) }}>
+                  <Input
+                    placeholder="Nom de la place (ex: Place 1)"
+                    value={table.id === newSeat.tableId ? newSeat.label : ""}
+                    onChange={e => setNewSeat({ tableId: table.id, label: e.target.value })}
+                  />
+                  <Button type="submit" className="bg-pink-500 text-white">Ajouter</Button>
+                </form>
+                {/* Liste places */}
+                <div className="flex flex-wrap gap-2">
+                  {table.seats.map(seat =>
+                    <span key={seat.id} className={`border rounded px-2 py-1 text-sm ${seat.guest.length ? "bg-gray-300 text-gray-500 line-through" : "bg-green-50"}`}>
+                      {seat.label} {seat.guest.length ? "(réservée)" : ""}
+                    </span>
+                  )}
+                  {table.seats.length === 0 && <span className="text-gray-400">Aucune place</span>}
+                </div>
+              </CardContent>
+            </Card>
+          ))}
+        </div>
+
+        {/* LISTE DES INVITÉS */}
         <Card>
           <CardHeader>
             <CardTitle>Invités confirmés ({guests.length})</CardTitle>
           </CardHeader>
           <CardContent>
-            <div className="space-y-4">
+            <div className="space-y-3">
               {guests.map(g =>
-                <div
-                  key={g.id}
-                  className="p-4 border rounded flex items-center justify-between cursor-pointer hover:bg-rose-50"
-                  onClick={() => setSelectedGuest(g)}
-                  title="Afficher les détails"
-                >
+                <div key={g.id} className="border rounded px-3 py-2 flex justify-between items-center bg-white/80 cursor-pointer hover:bg-pink-50"
+                  onClick={() => setEditingGuest(g)}>
                   <div>
-                    <div className="font-semibold">{g.name}</div>
-                    <div className="text-gray-500 text-sm">{g.guestCount > 1 ? `${g.guestCount} personnes` : "1 personne"}</div>
+                    <span className="font-bold">{g.name}</span> — <span>{g.phone}</span>
                   </div>
-                  <div className="flex items-center gap-2">
-                    <MapPin className="w-5 h-5" />
-                    {editing?.id === g.id ? (
-                      <>
-                        <select
-                          value={editing.seat}
-                          onChange={e => setEditing({ ...editing, seat: e.target.value })}
-                          className="border rounded p-1"
-                          onClick={e => e.stopPropagation()}
-                        >
-                          {seats.map(seat => (
-                            <option key={seat.id} value={seat.id}>{seat.label}</option>
-                          ))}
-                        </select>
-                        <Button size="sm" onClick={e => { e.stopPropagation(); handleSave(g.id); }}><Check /></Button>
-                        <Button size="sm" variant="outline" onClick={e => { e.stopPropagation(); setEditing(null); }}><X /></Button>
-                      </>
-                    ) : (
-                      <>
-                        <span>{seats.find(s => s.id === g.selectedSeat)?.label || g.selectedSeat}</span>
-                        <Button size="sm" variant="ghost" onClick={e => { e.stopPropagation(); handleEdit(g.id, g.selectedSeat); }}><Edit2 /></Button>
-                      </>
-                    )}
+                  <div className="flex gap-3 items-center">
+                    <span className="text-xs text-gray-600">
+                      {g.seat?.table?.name ? `${g.seat.table.name}, ` : ""}
+                      {g.seat?.label ? g.seat.label : <em className="text-pink-600">À attribuer</em>}
+                    </span>
                   </div>
                 </div>
               )}
@@ -321,73 +251,21 @@ export default function AdminPage() {
           </CardContent>
         </Card>
 
-        {/* Modale d'informations invité */}
-        <Dialog open={!!selectedGuest} onOpenChange={(open) => { if (!open) setSelectedGuest(null) }}>
-          <DialogContent className="max-w-lg">
-            {selectedGuest && (
-              <>
-                <DialogHeader>
-                  <DialogTitle>
-                    <Info className="inline mr-2" />
-                    Détail de l'invité
-                  </DialogTitle>
-                  <DialogDescription>
-                    Toutes les informations transmises lors de la confirmation.
-                  </DialogDescription>
-                </DialogHeader>
-                <div className="space-y-4 py-2">
-                  <div className="flex items-center gap-3">
-                    <User className="w-5 h-5" />
-                    <span className="font-bold">{selectedGuest.name}</span>
-                  </div>
-                  <div className="flex items-center gap-3">
-                    <Phone className="w-5 h-5" />
-                    <span>{selectedGuest.phone}</span>
-                  </div>
-                  {selectedGuest.attendanceType && (
-                    <div className="flex items-center gap-3">
-                      <Users className="w-5 h-5" />
-                      <span>{selectedGuest.attendanceType === "couple" ? "En couple" : "Seul(e)"} ({selectedGuest.guestCount} personne{selectedGuest.guestCount > 1 ? "s" : ""})</span>
-                    </div>
-                  )}
-                  {selectedGuest.partnerName && (
-                    <div className="flex items-center gap-3">
-                      <User className="w-5 h-5" />
-                      <span>Partenaire : {selectedGuest.partnerName}</span>
-                    </div>
-                  )}
-                  <div className="flex items-center gap-3">
-                    <MapPin className="w-5 h-5" />
-                    <span>
-                      Place : {seats.find(s => s.id === selectedGuest.selectedSeat)?.label || selectedGuest.selectedSeat}
-                    </span>
-                  </div>
-                  {selectedGuest.dietaryRestrictions && (
-                    <div className="flex items-center gap-3">
-                      <span className="font-semibold">Restrictions :</span>
-                      <span>{selectedGuest.dietaryRestrictions}</span>
-                    </div>
-                  )}
-                  {selectedGuest.message && (
-                    <div className="flex items-center gap-3">
-                      <span className="font-semibold">Message :</span>
-                      <span className="italic">{selectedGuest.message}</span>
-                    </div>
-                  )}
-                  <div className="flex items-center gap-3 text-xs text-gray-500">
-                    <Clock className="w-4 h-4" />
-                    <span>Confirmation : {formatDate(selectedGuest.submittedAt)}</span>
-                  </div>
-                </div>
-                <DialogFooter className="pt-2">
-                  <DialogClose asChild>
-                    <Button variant="outline">Fermer</Button>
-                  </DialogClose>
-                </DialogFooter>
-              </>
-            )}
-          </DialogContent>
-        </Dialog>
+        {/* MODALE DÉTAIL INVITÉ */}
+        <GuestEditDialog
+          open={!!editingGuest}
+          guest={editingGuest}
+          tables={tables}
+          onClose={() => setEditingGuest(null)}
+          onSave={async () => {
+            // Recharge la liste à la sauvegarde !
+            const guests = await fetch("/api/guests").then(r => r.json())
+            setGuests(guests)
+            // Tu peux aussi re-fetch les tables si besoin
+            const tables = await fetch("/api/tables").then(r => r.json())
+            setTables(tables)
+          }}
+        />
       </div>
     </div>
   )
