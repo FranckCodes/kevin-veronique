@@ -39,11 +39,9 @@ export default function AdminPage() {
   // Admin data
   const [tables, setTables] = useState<Table[]>([])
   const [guests, setGuests] = useState<Guest[]>([])
-  const [selectedTable, setSelectedTable] = useState<number | null>(null)
   const [newTable, setNewTable] = useState("")
   const [newSeat, setNewSeat] = useState({ tableId: 0, label: "" })
   const [loading, setLoading] = useState(false)
-  const [selectedGuest, setSelectedGuest] = useState<Guest | null>(null)
   const [editingGuest, setEditingGuest] = useState<Guest | null>(null)
 
 
