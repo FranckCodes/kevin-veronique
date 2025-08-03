@@ -53,7 +53,7 @@ export default function AdminPage() {
   // Calculs des statistiques
   const totalSeats = tablesData.reduce((acc, table) => acc + table.seats.length, 0)
   const occupiedSeats = tablesData.reduce(
-    (acc, table) => acc + table.seats.filter((seat) => seat.guest.length > 0).length,
+    (acc, table) => acc + table.seats.filter((seat : any) => seat.guest.length > 0).length,
     0,
   )
   const freeSeats = totalSeats - occupiedSeats
@@ -337,7 +337,7 @@ export default function AdminPage() {
         {/* SEATS PAR TABLE */}
         <div className="grid md:grid-cols-2 lg:grid-cols-3 gap-6 mb-10">
           {tablesData.map((table) => {
-            const occupiedSeatsCount = table.seats.filter((seat) => seat.guest.length > 0).length
+            const occupiedSeatsCount = table.seats.filter((seat : any) => seat.guest.length > 0).length
             const totalSeatsCount = table.seats.length
             const freeSeatsCount = totalSeatsCount - occupiedSeatsCount
 
@@ -374,7 +374,7 @@ export default function AdminPage() {
                   </form>
                   {/* Liste places */}
                   <div className="flex flex-wrap gap-2">
-                    {table.seats.map((seat) => (
+                    {table.seats.map((seat : any) => (
                       <Badge
                         key={seat.id}
                         variant={seat.guest.length ? "secondary" : "outline"}
