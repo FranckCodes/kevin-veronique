@@ -7,7 +7,7 @@ declare global {
   var __code_cache: { [phone: string]: { code: string; expire: number } } | undefined
 }
 
-const ALLOWED_NUMBERS = ["+243827029543", "+1335161876"] // Mets tes numéros autorisés ici
+const ALLOWED_NUMBERS = ["+243827029543", "+13135161876"] // Mets tes numéros autorisés ici
 const CODE_CACHE: { [phone: string]: { code: string; expire: number } } = globalThis.__code_cache || (globalThis.__code_cache = {})
 
 export async function POST(req: NextRequest) {
