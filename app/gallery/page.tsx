@@ -11,11 +11,11 @@ import { useState } from "react"
 const galleryImages = Array.from({ length: 21 }, (_, index) => {
   const id = index + 1
   const category = id % 3 === 0 ? "lifestyle" : id % 2 === 0 ? "engagement" : "couple"
-  const src = `/images/couple-photo-${id}.jpg` // Assure-toi que ces fichiers existent oui oui 
+  const src = `/images/couple-photo-${id}.jpg`
   return {
     id,
     src,
-    alt: `Véronique et Kevin - Photo ${id}`,
+    alt: `Veronique and Kevin - Photo ${id}`,
     category,
   }
 })
@@ -25,9 +25,9 @@ export default function GalleryPage() {
   const [selectedImage, setSelectedImage] = useState<number | null>(null)
 
   const categories = [
-    { id: "all", label: "Toutes" },
-    { id: "couple", label: "En Couple" },
-    { id: "engagement", label: "Fiançailles" },
+    { id: "all", label: "All" },
+    { id: "couple", label: "Couple" },
+    { id: "engagement", label: "Engagement" },
     { id: "lifestyle", label: "Lifestyle" },
   ]
 
@@ -44,11 +44,11 @@ export default function GalleryPage() {
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center text-rose-600 hover:text-rose-700">
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Retour à l'accueil
+              Back to Home
             </Link>
             <div className="flex items-center space-x-2">
               <Heart className="w-6 h-6 text-rose-600 fill-rose-600" />
-              <span className="text-xl font-serif text-gray-800">Galerie</span>
+              <span className="text-xl font-serif text-gray-800">Gallery</span>
             </div>
           </div>
         </div>
@@ -62,8 +62,8 @@ export default function GalleryPage() {
           transition={{ duration: 0.6 }}
           className="text-center mb-12"
         >
-          <h1 className="text-5xl font-serif text-gray-800 mb-4">Notre Galerie</h1>
-          <p className="text-xl text-gray-600">Nos plus beaux moments ensemble</p>
+          <h1 className="text-5xl font-serif text-gray-800 mb-4">Our Gallery</h1>
+          <p className="text-xl text-gray-600">Our most beautiful moments together</p>
         </motion.div>
 
         {/* Category Filter */}
@@ -152,7 +152,7 @@ export default function GalleryPage() {
             <CardContent className="p-8">
               <Heart className="w-12 h-12 mx-auto mb-4 fill-white" />
               <blockquote className="text-2xl font-serif italic mb-4">
-                "Chaque photo raconte une partie de notre histoire d'amour"
+                "Each photo tells a part of our love story"
               </blockquote>
               <p className="text-lg">Kevin & Véronique</p>
             </CardContent>
@@ -169,14 +169,14 @@ export default function GalleryPage() {
           <Card className="bg-white/90 backdrop-blur-sm border-rose-200 shadow-xl max-w-md mx-auto">
             <CardContent className="p-6">
               <Download className="w-8 h-8 text-rose-600 mx-auto mb-4" />
-              <h3 className="text-xl font-serif text-gray-800 mb-2">Télécharger nos photos</h3>
-              <p className="text-gray-600 mb-4">Gardez nos plus beaux souvenirs avec vous</p>
+              <h3 className="text-xl font-serif text-gray-800 mb-2">Download our photos</h3>
+              <p className="text-gray-600 mb-4">Keep our most beautiful memories with you</p>
               <a
                 href="/downloads/album-veronique-kevin.zip"
                 download
                 className="bg-rose-500 hover:bg-rose-600 text-white inline-block px-6 py-2 rounded-md font-medium"
               >
-                Télécharger l'album complet
+                Download the full album
               </a>
             </CardContent>
           </Card>
@@ -209,7 +209,7 @@ export default function GalleryPage() {
 
       {/* Footer */}
       <div className="text-center py-8">
-        <p className="text-gray-500 text-sm">© 2025 franckCodes. Tous droits réservés.</p>
+        <p className="text-gray-500 text-sm">© 2025 franckCodes. All rights reserved.</p>
       </div>
     </div>
   )

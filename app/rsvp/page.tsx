@@ -15,7 +15,7 @@ type Table = {
 
 export default function RSVPPage() {
   const [tables, setTables] = useState<Table[]>([])
-  const [selectedTable, setSelectedTable] = useState<number | "">( "")
+  const [selectedTable, setSelectedTable] = useState<number | "">("")
   const [selectedSeat, setSelectedSeat] = useState<number | "">("")
   const [formData, setFormData] = useState({
     name: "",
@@ -33,7 +33,7 @@ export default function RSVPPage() {
     fetch("/api/tables").then(res => res.json()).then(setTables)
   }, [])
 
-  // Champs
+  // Handle input changes
   const handleChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     setFormData({ ...formData, [e.target.name]: e.target.value })
   }
@@ -54,7 +54,7 @@ export default function RSVPPage() {
     })
     setIsSubmitting(false)
     if (res.ok) setShowSuccess(true)
-    else alert("Erreur, réessaie !")
+    else alert("Error, please try again!")
   }
 
   if (showSuccess) {
@@ -62,9 +62,9 @@ export default function RSVPPage() {
       <div className="min-h-screen flex items-center justify-center p-4 bg-gradient-to-br from-rose-50 via-pink-50 to-purple-50">
         <Card className="max-w-md mx-auto text-center">
           <CardContent className="p-8">
-            <h2 className="text-2xl font-serif mb-4">Merci !</h2>
-            <p className="mb-6 text-gray-600">Votre confirmation a bien été enregistrée. À bientôt au mariage !</p>
-            <Button href="/" asChild>Retour à l'accueil</Button>
+            <h2 className="text-2xl font-serif mb-4">Thank you!</h2>
+            <p className="mb-6 text-gray-600">Your confirmation has been received. See you at the wedding!</p>
+            <Button href="/" asChild>Back to Home</Button>
           </CardContent>
         </Card>
       </div>
@@ -76,61 +76,65 @@ export default function RSVPPage() {
       <div className="container mx-auto max-w-lg">
         <Card>
           <CardHeader>
-            <CardTitle className="text-center text-2xl font-serif">Confirmation de présence</CardTitle>
+            <CardTitle className="text-center text-2xl font-serif">RSVP Confirmation</CardTitle>
           </CardHeader>
           <CardContent className="space-y-6 py-8">
             <form onSubmit={handleSubmit} className="space-y-5">
 
-              {/* Infos invité */}
+              {/* Guest Info */}
               <div>
-                <Label>Nom complet *</Label>
+                <Label>Full Name *</Label>
                 <Input name="name" value={formData.name} onChange={handleChange} required />
               </div>
               <div>
-                <Label>Téléphone *</Label>
+                <Label>Phone *</Label>
                 <Input name="phone" type="tel" value={formData.phone} onChange={handleChange} required />
               </div>
 
-              {/* Type de participation */}
+              {/* Attendance Type */}
               <div>
-                <Label>Je viens *</Label>
+                <Label>I am coming *</Label>
                 <div className="flex gap-3 mt-1">
                   <Button type="button" variant={formData.attendanceType === "solo" ? "default" : "outline"}
-                    onClick={() => setFormData({ ...formData, attendanceType: "solo", partnerName: "" })}>Seul(e)</Button>
+                    onClick={() => setFormData({ ...formData, attendanceType: "solo", partnerName: "" })}>
+                    Alone
+                  </Button>
                   <Button type="button" variant={formData.attendanceType === "couple" ? "default" : "outline"}
-                    onClick={() => setFormData({ ...formData, attendanceType: "couple" })}>En couple</Button>
+                    onClick={() => setFormData({ ...formData, attendanceType: "couple" })}>
+                    As a couple
+                  </Button>
                 </div>
               </div>
               {formData.attendanceType === "couple" && (
                 <div>
-                  <Label>Nom du partenaire *</Label>
+                  <Label>Partner's Name *</Label>
                   <Input name="partnerName" value={formData.partnerName} onChange={handleChange} required />
                 </div>
               )}
 
-              {/* Choix Table */}
+              {/* Table Selection */}
               <div>
-                <Label>Choix de table</Label>
+                <Label>Table selection</Label>
                 <select className="border rounded w-full p-2 mt-1"
                   value={selectedTable}
                   onChange={e => { setSelectedTable(Number(e.target.value) || ""); setSelectedSeat("") }}
                 >
-                  <option value="">Laisser les mariés choisir pour moi</option>
+                  <option value="">Let the couple choose for me</option>
                   {tables.map(table =>
                     <option key={table.id} value={table.id}>{table.name}</option>
                   )}
                 </select>
               </div>
 
-              {/* Choix Place */}
+              {/* Seat Selection */}
               {selectedTable && (
                 <div>
-                  <Label>Choix de place</Label>
+                  <Label>Seat selection</Label>
                   <select className="border rounded w-full p-2 mt-1"
                     value={selectedSeat}
                     onChange={e => setSelectedSeat(Number(e.target.value) || "")}
                   >
-                    <option value="">Laisser les mariés choisir ma place</option>
+                    <option value="">Let the couple choose my seat</option>
                     {tables.find(t => t.id === selectedTable)?.seats
                       .filter(seat => seat.guest.length === 0)
                       .map(seat =>
@@ -140,21 +144,21 @@ export default function RSVPPage() {
                 </div>
               )}
 
-              {/* Restrictions */}
+              {/* Dietary Restrictions */}
               <div>
-                <Label>Restrictions alimentaires</Label>
+                <Label>Dietary restrictions</Label>
                 <Textarea name="dietaryRestrictions" value={formData.dietaryRestrictions} onChange={handleChange} rows={2} />
               </div>
               {/* Message */}
               <div>
-                <Label>Message pour les mariés</Label>
+                <Label>Message for the couple</Label>
                 <Textarea name="message" value={formData.message} onChange={handleChange} rows={2} />
               </div>
 
               {/* Submit */}
               <Button type="submit" disabled={isSubmitting || !formData.name || !formData.phone || !formData.attendanceType}
                 className="w-full bg-gradient-to-r from-rose-500 to-pink-600 text-white py-3 text-lg font-medium">
-                {isSubmitting ? "Envoi..." : "Confirmer ma présence"}
+                {isSubmitting ? "Sending..." : "Confirm my attendance"}
               </Button>
             </form>
           </CardContent>

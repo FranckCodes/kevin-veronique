@@ -33,7 +33,7 @@ export default function ContactPage() {
     e.preventDefault()
     setIsSubmitting(true)
 
-    // Simulation d'envoi
+    // Simulate send
     await new Promise((resolve) => setTimeout(resolve, 2000))
 
     setIsSubmitting(false)
@@ -44,13 +44,12 @@ export default function ContactPage() {
   }
 
   const handleWhatsAppClick = () => {
-    const message = "Bonjour Sarah ! Je vous contacte concernant votre mariage."
-    const phoneNumber = "33612345678" // Remplacer par le vrai numéro
+    const message = "Hello Véronique! I'm reaching out about your wedding."
+    const phoneNumber = "33612345678"
     window.open(`https://wa.me/${phoneNumber}?text=${encodeURIComponent(message)}`, "_blank")
   }
 
   const handleMessengerClick = () => {
-    // Remplacer par le vrai lien Messenger
     window.open("https://m.me/sarah.kevin.wedding", "_blank")
   }
 
@@ -62,7 +61,7 @@ export default function ContactPage() {
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center text-rose-600 hover:text-rose-700">
               <ArrowLeft className="w-4 h-4 mr-2" />
-              Retour à l'accueil
+              Back to Home
             </Link>
             <div className="flex items-center space-x-2">
               <Heart className="w-6 h-6 text-rose-600 fill-rose-600" />
@@ -80,8 +79,8 @@ export default function ContactPage() {
           transition={{ duration: 0.6 }}
           className="text-center mb-8 md:mb-12"
         >
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif text-gray-800 mb-4">Contactez-nous</h1>
-          <p className="text-lg md:text-xl text-gray-600">Nous sommes là pour répondre à vos questions</p>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif text-gray-800 mb-4">Contact Us</h1>
+          <p className="text-lg md:text-xl text-gray-600">We are here to answer your questions</p>
         </motion.div>
 
         <div className="grid lg:grid-cols-2 gap-8 md:gap-12">
@@ -95,13 +94,13 @@ export default function ContactPage() {
             {/* Contact Cards */}
             <Card className="bg-white/90 backdrop-blur-sm border-rose-200 shadow-xl">
               <CardHeader>
-                <CardTitle className="text-2xl font-serif text-gray-800">Informations de Contact</CardTitle>
+                <CardTitle className="text-2xl font-serif text-gray-800">Contact Information</CardTitle>
               </CardHeader>
               <CardContent className="space-y-6">
                 <div className="flex items-center space-x-4 p-4 bg-rose-50 rounded-lg">
                   <Phone className="w-6 h-6 text-rose-600" />
                   <div>
-                    <h4 className="font-semibold text-gray-800">Téléphone</h4>
+                    <h4 className="font-semibold text-gray-800">Phone</h4>
                     <p className="text-gray-600">Véronique: +33 6 12 34 56 78</p>
                     <p className="text-gray-600">Kevin: +33 6 87 65 43 21</p>
                   </div>
@@ -112,16 +111,16 @@ export default function ContactPage() {
                   <div>
                     <h4 className="font-semibold text-gray-800">Email</h4>
                     <p className="text-gray-600">contact@veroniqueetkevin.fr</p>
-                    <p className="text-gray-600">mariage2025@veroniqueetkevin.fr</p>
+                    <p className="text-gray-600">wedding2025@veroniqueetkevin.fr</p>
                   </div>
                 </div>
 
                 <div className="flex items-center space-x-4 p-4 bg-rose-50 rounded-lg">
                   <MapPin className="w-6 h-6 text-rose-600" />
                   <div>
-                    <h4 className="font-semibold text-gray-800">Adresse</h4>
+                    <h4 className="font-semibold text-gray-800">Address</h4>
                     <p className="text-gray-600">Texas, USA</p>
-                    <p className="text-gray-600">Disponibles pour rendez-vous</p>
+                    <p className="text-gray-600">Available for appointment</p>
                   </div>
                 </div>
               </CardContent>
@@ -130,10 +129,10 @@ export default function ContactPage() {
             {/* Quick Contact */}
             <Card className="bg-gradient-to-r from-rose-500 to-pink-600 text-white shadow-xl">
               <CardHeader>
-                <CardTitle className="text-2xl font-serif">Contact Rapide</CardTitle>
+                <CardTitle className="text-2xl font-serif">Quick Contact</CardTitle>
               </CardHeader>
               <CardContent className="space-y-4">
-                <p className="text-lg">Besoin d'une réponse immédiate ? Contactez Véronique directement :</p>
+                <p className="text-lg">Need an immediate answer? Contact Véronique directly:</p>
 
                 <div className="flex flex-col sm:flex-row space-y-3 sm:space-y-0 sm:space-x-4">
                   <Button
@@ -153,18 +152,18 @@ export default function ContactPage() {
                   </Button>
                 </div>
 
-                <p className="text-sm opacity-90">Véronique répond généralement dans l'heure qui suit !</p>
+                <p className="text-sm opacity-90">Véronique usually replies within the hour!</p>
               </CardContent>
             </Card>
 
             {/* Social Media */}
             <Card className="bg-white/90 backdrop-blur-sm border-rose-200 shadow-xl">
               <CardHeader>
-                <CardTitle className="text-2xl font-serif text-gray-800">Suivez-nous</CardTitle>
+                <CardTitle className="text-2xl font-serif text-gray-800">Follow Us</CardTitle>
               </CardHeader>
               <CardContent>
                 <p className="text-gray-600 mb-6">
-                  Suivez nos préparatifs de mariage et nos moments de bonheur sur les réseaux sociaux !
+                  Follow our wedding preparations and happy moments on social media!
                 </p>
 
                 <div className="flex space-x-4">
@@ -207,7 +206,7 @@ export default function ContactPage() {
           >
             <Card className="bg-white/90 backdrop-blur-sm border-rose-200 shadow-xl">
               <CardHeader>
-                <CardTitle className="text-2xl font-serif text-gray-800">Envoyez-nous un message</CardTitle>
+                <CardTitle className="text-2xl font-serif text-gray-800">Send us a message</CardTitle>
               </CardHeader>
               <CardContent>
                 {showSuccess && (
@@ -218,7 +217,7 @@ export default function ContactPage() {
                   >
                     <div className="flex items-center">
                       <Heart className="w-5 h-5 mr-2" />
-                      Merci ! Votre message a été envoyé avec succès.
+                      Thank you! Your message was sent successfully.
                     </div>
                   </motion.div>
                 )}
@@ -226,7 +225,7 @@ export default function ContactPage() {
                 <form onSubmit={handleSubmit} className="space-y-6">
                   <div className="grid md:grid-cols-2 gap-4">
                     <div>
-                      <Label htmlFor="name">Nom complet *</Label>
+                      <Label htmlFor="name">Full Name *</Label>
                       <Input
                         id="name"
                         name="name"
@@ -251,7 +250,7 @@ export default function ContactPage() {
                   </div>
 
                   <div>
-                    <Label htmlFor="subject">Sujet *</Label>
+                    <Label htmlFor="subject">Subject *</Label>
                     <Input
                       id="subject"
                       name="subject"
@@ -259,7 +258,7 @@ export default function ContactPage() {
                       onChange={handleInputChange}
                       required
                       className="mt-1"
-                      placeholder="Ex: Question sur le lieu, RSVP, etc."
+                      placeholder="Ex: Venue, RSVP, question, etc."
                     />
                   </div>
 
@@ -273,7 +272,7 @@ export default function ContactPage() {
                       required
                       className="mt-1"
                       rows={6}
-                      placeholder="Votre message..."
+                      placeholder="Your message..."
                     />
                   </div>
 
@@ -285,16 +284,16 @@ export default function ContactPage() {
                     {isSubmitting ? (
                       <div className="flex items-center">
                         <div className="animate-spin rounded-full h-5 w-5 border-b-2 border-white mr-2"></div>
-                        Envoi en cours...
+                        Sending...
                       </div>
                     ) : (
-                      "Envoyer le message"
+                      "Send message"
                     )}
                   </Button>
                 </form>
 
                 <div className="mt-6 pt-6 border-t border-gray-200">
-                  <p className="text-sm text-gray-500 text-center">Nous nous engageons à répondre dans les 24 heures</p>
+                  <p className="text-sm text-gray-500 text-center">We commit to respond within 24 hours</p>
                 </div>
               </CardContent>
             </Card>
@@ -310,59 +309,59 @@ export default function ContactPage() {
         >
           <Card className="bg-white/90 backdrop-blur-sm border-rose-200 shadow-xl">
             <CardHeader>
-              <CardTitle className="text-2xl font-serif text-gray-800 text-center">Questions Fréquentes</CardTitle>
+              <CardTitle className="text-2xl font-serif text-gray-800 text-center">Frequently Asked Questions</CardTitle>
             </CardHeader>
             <CardContent>
               <div className="grid grid-cols-1 md:grid-cols-2 gap-6 md:gap-8">
                 <div className="space-y-4">
                   <div>
                     <h4 className="font-semibold text-gray-800 mb-2 text-sm md:text-base">
-                      Puis-je amener un accompagnateur ?
+                      Can I bring a plus-one?
                     </h4>
                     <p className="text-gray-600 text-xs md:text-sm">
-                      Oui, précisez-le lors de votre RSVP ou contactez-nous directement.
+                      Yes, please specify this when you RSVP or contact us directly.
                     </p>
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-800 mb-2 text-sm md:text-base">
-                      Y a-t-il un code vestimentaire ?
+                      Is there a dress code?
                     </h4>
                     <p className="text-gray-600 text-xs md:text-sm">
-                      Tenue de soirée recommandée. Évitez le blanc (réservé à la mariée).
+                      Evening attire recommended. Please avoid white (reserved for the bride).
                     </p>
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-800 mb-2 text-sm md:text-base">
-                      Le lieu est-il accessible ?
+                      Is the venue accessible?
                     </h4>
                     <p className="text-gray-600 text-xs md:text-sm">
-                      Oui, le château est entièrement accessible aux personnes à mobilité réduite.
+                      Yes, the venue is fully accessible for guests with reduced mobility.
                     </p>
                   </div>
                 </div>
                 <div className="space-y-4">
                   <div>
                     <h4 className="font-semibold text-gray-800 mb-2 text-sm md:text-base">
-                      Puis-je prendre des photos ?
+                      Can I take photos?
                     </h4>
                     <p className="text-gray-600 text-xs md:text-sm">
-                      Oui, mais nous demandons de respecter les moments de cérémonie.
+                      Yes, but we kindly ask you to respect the ceremony moments.
                     </p>
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-800 mb-2 text-sm md:text-base">
-                      Y a-t-il des options végétariennes ?
+                      Are there vegetarian options?
                     </h4>
                     <p className="text-gray-600 text-xs md:text-sm">
-                      Absolument ! Précisez vos préférences alimentaires lors du RSVP.
+                      Absolutely! Please let us know your dietary preferences when you RSVP.
                     </p>
                   </div>
                   <div>
                     <h4 className="font-semibold text-gray-800 mb-2 text-sm md:text-base">
-                      Jusqu'à quelle heure dure la fête ?
+                      Until what time does the party last?
                     </h4>
                     <p className="text-gray-600 text-xs md:text-sm">
-                      La soirée se termine à 2h du matin avec possibilité de navette.
+                      The party goes until 2:00 AM with shuttle service available.
                     </p>
                   </div>
                 </div>
@@ -374,7 +373,7 @@ export default function ContactPage() {
 
       {/* Footer */}
       <div className="text-center py-8">
-        <p className="text-gray-500 text-sm">© 2025 franckCodes. Tous droits réservés.</p>
+        <p className="text-gray-500 text-sm">© 2025 franckCodes. All rights reserved.</p>
       </div>
     </div>
   )
