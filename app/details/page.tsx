@@ -15,10 +15,10 @@ export default function DetailsPage() {
           <div className="flex items-center justify-between">
             <Link href="/" className="flex items-center text-rose-600 hover:text-rose-700">
               <ArrowLeft className="w-4 h-4 mr-2" />
-              <span className="hidden sm:inline">Retour à l'accueil</span>
-              <span className="sm:hidden">Retour</span>
+              <span className="hidden sm:inline">Back to Home</span>
+              <span className="sm:hidden">Back</span>
             </Link>
-            <h1 className="text-lg md:text-xl font-serif text-gray-800">Détails du Mariage</h1>
+            <h1 className="text-lg md:text-xl font-serif text-gray-800">Wedding Details</h1>
           </div>
         </div>
       </div>
@@ -31,8 +31,8 @@ export default function DetailsPage() {
           transition={{ duration: 0.6 }}
           className="text-center mb-8 md:mb-12"
         >
-          <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif text-gray-800 mb-4">Détails de la Cérémonie</h1>
-          <p className="text-lg md:text-xl text-gray-600">Kevin & Véronique - 07 Août 2025</p>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-serif text-gray-800 mb-4">Ceremony Details</h1>
+          <p className="text-lg md:text-xl text-gray-600">Kevin & Véronique - 30 August 2025</p>
         </motion.div>
 
         {/* Date & Time */}
@@ -48,17 +48,17 @@ export default function DetailsPage() {
                 <div className="flex flex-col items-center">
                   <Calendar className="w-10 h-10 md:w-12 md:h-12 mb-4" />
                   <h3 className="text-xl md:text-2xl font-serif mb-2">Date</h3>
-                  <p className="text-base md:text-lg">Jeudi 07 Août 2025</p>
+                  <p className="text-base md:text-lg">Saturday, 30 August 2025</p>
                 </div>
                 <div className="flex flex-col items-center">
                   <Clock className="w-10 h-10 md:w-12 md:h-12 mb-4" />
-                  <h3 className="text-xl md:text-2xl font-serif mb-2">Heure</h3>
-                  <p className="text-base md:text-lg">Cérémonie à 16h00</p>
-                  <p className="text-sm opacity-90">Cocktail à 17h30</p>
+                  <h3 className="text-xl md:text-2xl font-serif mb-2">Time</h3>
+                  <p className="text-base md:text-lg">Ceremony at 4:00 PM</p>
+                  <p className="text-sm opacity-90">Cocktail at 5:30 PM</p>
                 </div>
                 <div className="flex flex-col items-center">
                   <MapPin className="w-10 h-10 md:w-12 md:h-12 mb-4" />
-                  <h3 className="text-xl md:text-2xl font-serif mb-2">Lieu</h3>
+                  <h3 className="text-xl md:text-2xl font-serif mb-2">Venue</h3>
                   <p className="text-base md:text-lg">Chic Events DFW</p>
                   <p className="text-sm opacity-90">Texas, USA</p>
                 </div>
@@ -76,21 +76,19 @@ export default function DetailsPage() {
         >
           <Card className="bg-white/90 backdrop-blur-sm border-rose-200 shadow-xl">
             <CardHeader>
-              <CardTitle className="text-3xl font-serif text-gray-800 text-center">Le Chic Events DFW</CardTitle>
+              <CardTitle className="text-3xl font-serif text-gray-800 text-center">The Chic Events DFW</CardTitle>
             </CardHeader>
             <CardContent className="p-8">
               <div className="grid md:grid-cols-2 gap-8">
                 <div>
-                  <h4 className="text-xl font-semibold text-gray-800 mb-4">Un lieu d'exception</h4>
+                  <h4 className="text-xl font-semibold text-gray-800 mb-4">An Exceptional Venue</h4>
                   <p className="text-gray-600 leading-relaxed mb-4">
-                    Le Chic Events DFW, joyau historique situé au cœur de Paris, nous accueillera pour célébrer
-                    notre union. Avec ses jardins à la française et son architecture élégante, ce lieu chargé d'histoire
-                    offre un cadre romantique et raffiné pour notre grand jour.
+                    The Chic Events DFW, a beautiful venue located in the heart of Texas, will host our celebration. With its elegant gardens and refined architecture, this historic place offers a romantic and unique setting for our big day.
                   </p>
                   <div className="space-y-2 text-gray-600">
                     <div className="flex items-center">
                       <MapPin className="w-4 h-4 mr-2 text-rose-600" />
-                      <span>Hurst,TX</span>
+                      <span>Hurst, TX</span>
                     </div>
                     <div className="flex items-center">
                       <Phone className="w-4 h-4 mr-2 text-rose-600" />
@@ -101,7 +99,7 @@ export default function DetailsPage() {
                 <div className="relative h-64 rounded-lg overflow-hidden">
                   <Image
                     src="/images/salle/salle-3.jpg"
-                    alt="Chic Events DFW extérieur"
+                    alt="Chic Events DFW exterior"
                     fill
                     className="object-cover"
                   />
@@ -120,41 +118,41 @@ export default function DetailsPage() {
         >
           <Card className="bg-white/90 backdrop-blur-sm border-rose-200 shadow-xl">
             <CardHeader>
-              <CardTitle className="text-2xl font-serif text-gray-800 text-center">Galerie du Lieu</CardTitle>
+              <CardTitle className="text-2xl font-serif text-gray-800 text-center">Venue Gallery</CardTitle>
             </CardHeader>
             <CardContent className="p-8">
               <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-4 md:gap-6">
                 <div className="relative h-40 sm:h-48 rounded-lg overflow-hidden">
                   <Image
                     src="/images/salle/salle-8.jpg"
-                    alt="Salle de réception"
+                    alt="Reception Hall"
                     fill
                     className="object-cover hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-2">
-                    <p className="text-xs md:text-sm font-medium">Salle de Réception</p>
+                    <p className="text-xs md:text-sm font-medium">Reception Hall</p>
                   </div>
                 </div>
                 <div className="relative h-48 rounded-lg overflow-hidden">
                   <Image
                     src="/images/salle/salle-6.jpg"
-                    alt="Jardins du château"
+                    alt="French Gardens"
                     fill
                     className="object-cover hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-2">
-                    <p className="text-sm font-medium">Jardins à la Française</p>
+                    <p className="text-sm font-medium">French Gardens</p>
                   </div>
                 </div>
                 <div className="relative h-48 rounded-lg overflow-hidden">
                   <Image
                     src="/images/salle/salle-7.jpg"
-                    alt="Salon d'honneur"
+                    alt="Grand Lounge"
                     fill
                     className="object-cover hover:scale-105 transition-transform duration-300"
                   />
                   <div className="absolute bottom-0 left-0 right-0 bg-black/50 text-white p-2">
-                    <p className="text-sm font-medium">Salon d'Honneur</p>
+                    <p className="text-sm font-medium">Grand Lounge</p>
                   </div>
                 </div>
               </div>
@@ -172,7 +170,7 @@ export default function DetailsPage() {
           <Card className="bg-white/90 backdrop-blur-sm border-rose-200 shadow-xl">
             <CardHeader>
               <CardTitle className="text-2xl font-serif text-gray-800 text-center">
-                Programme de la Soirée
+                Evening Program
               </CardTitle>
             </CardHeader>
             <CardContent className="p-8">
@@ -180,29 +178,29 @@ export default function DetailsPage() {
                 <div className="flex items-center space-x-4 p-4 bg-rose-50 rounded-lg">
                   <Clock className="w-6 h-6 text-rose-600" />
                   <div>
-                    <h4 className="font-semibold text-gray-800">19h00 - Ouverture de la soirée</h4>
-                    <p className="text-gray-600">Accueil des invités & installation</p>
+                    <h4 className="font-semibold text-gray-800">7:00 PM - Start of the evening</h4>
+                    <p className="text-gray-600">Guest welcome & seating</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-4 p-4 bg-rose-50 rounded-lg">
                   <Gift className="w-6 h-6 text-rose-600" />
                   <div>
-                    <h4 className="font-semibold text-gray-800">20h00 - Entrée des mariés</h4>
-                    <p className="text-gray-600">Arrivée et présentation officielle du couple</p>
+                    <h4 className="font-semibold text-gray-800">8:00 PM - Couple Entrance</h4>
+                    <p className="text-gray-600">Arrival and official presentation of the couple</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-4 p-4 bg-rose-50 rounded-lg">
                   <Utensils className="w-6 h-6 text-rose-600" />
                   <div>
-                    <h4 className="font-semibold text-gray-800">22h00 - Dîner</h4>
-                    <p className="text-gray-600">Repas festif & partages autour de la table</p>
+                    <h4 className="font-semibold text-gray-800">10:00 PM - Dinner</h4>
+                    <p className="text-gray-600">Festive meal & sharing around the table</p>
                   </div>
                 </div>
                 <div className="flex items-center space-x-4 p-4 bg-rose-50 rounded-lg">
                   <Music className="w-6 h-6 text-rose-600" />
                   <div>
-                    <h4 className="font-semibold text-gray-800">Après le dîner - Ambiance & danse</h4>
-                    <p className="text-gray-600">Place à la fête : dansons jusqu’à 02h00 du matin !</p>
+                    <h4 className="font-semibold text-gray-800">After dinner - Party & Dance</h4>
+                    <p className="text-gray-600">Let's party: dancing until 2:00 AM!</p>
                   </div>
                 </div>
               </div>
@@ -221,19 +219,19 @@ export default function DetailsPage() {
               <CardHeader>
                 <CardTitle className="text-xl font-serif text-gray-800 flex items-center">
                   <Car className="w-5 h-5 mr-2 text-rose-600" />
-                  Transport & Parking
+                  Transportation & Parking
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3 text-gray-600">
                   <p>
-                    <strong>En voiture :</strong> Parking gratuit disponible sur place
+                    <strong>By car:</strong> Free parking available on site
                   </p>
                   <p>
-                    <strong>En transport :</strong> RER A - Station Rueil-Malmaison (15min à pied)
+                    <strong>By public transport:</strong> RER A - Rueil-Malmaison station (15 min walk)
                   </p>
                   <p>
-                    <strong>Navette :</strong> Service de navette depuis la gare (nous contacter)
+                    <strong>Shuttle:</strong> Shuttle service from the station (contact us)
                   </p>
                 </div>
               </CardContent>
@@ -243,18 +241,18 @@ export default function DetailsPage() {
               <CardHeader>
                 <CardTitle className="text-xl font-serif text-gray-800 flex items-center">
                   <Gift className="w-5 h-5 mr-2 text-rose-600" />
-                  Liste de Mariage
+                  Wedding Gift List
                 </CardTitle>
               </CardHeader>
               <CardContent>
                 <div className="space-y-3 text-gray-600">
-                  <p>Votre présence est le plus beau des cadeaux !</p>
+                  <p>Your presence is the best gift!</p>
                   <p>
-                    <strong>Liste disponible chez :</strong>
+                    <strong>Gift list available at:</strong>
                   </p>
                   <p>• Galeries Lafayette</p>
-                  <p>• La Redoute Mariage</p>
-                  <p>• Ou participation libre</p>
+                  <p>• La Redoute Wedding</p>
+                  <p>• Or free participation</p>
                 </div>
               </CardContent>
             </Card>
@@ -264,7 +262,7 @@ export default function DetailsPage() {
 
       {/* Footer */}
       <div className="text-center py-8">
-        <p className="text-gray-500 text-sm">© 2025 franckCodes. Tous droits réservés.</p>
+        <p className="text-gray-500 text-sm">© 2025 franckCodes. All rights reserved.</p>
       </div>
     </div>
   )

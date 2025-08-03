@@ -8,8 +8,8 @@ const inter = Inter({ subsets: ["latin"], variable: "--font-inter" })
 const playfair = Playfair_Display({ subsets: ["latin"], variable: "--font-playfair" })
 
 export const metadata: Metadata = {
-  title: "Kevin & Véronique - Invitation de Mariage",
-  description: "Vous êtes cordialement invités au mariage de Véronique et Kevin",
+  title: "Kevin & Véronique - Wedding Invitation",
+  description: "You are cordially invited to the wedding of Véronique and Kevin.",
   viewport: "width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no",
   themeColor: "#f43f5e",
   appleWebApp: {
@@ -19,8 +19,7 @@ export const metadata: Metadata = {
   },
   formatDetection: {
     telephone: false,
-  },
-    generator: 'v0.dev'
+  }
 }
 
 export default function RootLayout({
@@ -29,7 +28,7 @@ export default function RootLayout({
   children: React.ReactNode
 }) {
   return (
-    <html lang="fr">
+    <html lang="en">
       <head>
         <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no" />
         <meta name="theme-color" content="#f43f5e" />

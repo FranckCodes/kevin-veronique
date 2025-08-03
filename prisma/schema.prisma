@@ -7,15 +7,32 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
-model Guest {
-  id           Int      @id @default(autoincrement())
-  name         String
-  guestCount   Int
-  selectedSeat String
-  submittedAt  DateTime @default(now())
+model WeddingTable {
+  id    Int     @id @default(autoincrement())
+  name  String  // ex: "Table VIP", "Famille A"
+  seats Seat[]
 }
 
 model Seat {
-  id    String  @id   // exemple: "A1"
-  label String
+  id      Int           @id @default(autoincrement())
+  label   String        // ex: "Place 1", "Place 2"
+  table   WeddingTable  @relation(fields: [tableId], references: [id])
+  tableId Int
+
+  guest   Guest[]       // Les invités qui ont réservé cette place (1 max)
+}
+
+model Guest {
+  id           Int      @id @default(autoincrement())
+  name         String
+  phone        String
+  guestCount   Int
+  attendanceType String?
+  partnerName  String?
+  dietaryRestrictions String?
+  message      String?
+  submittedAt  DateTime @default(now())
+  
+  seatId       Int?    // Nullable
+  seat         Seat?   @relation(fields: [seatId], references: [id])
 }

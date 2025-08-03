@@ -8,15 +8,40 @@ export async function PUT(
 ) {
   const { id } = params;
   const body = await request.json();
-  const { selectedSeat } = body;
 
-  if (!selectedSeat) {
-    return NextResponse.json({ error: "Place manquante" }, { status: 400 });
+  // On extrait TOUTES les infos modifiables possibles
+  const {
+    name,
+    phone,
+    guestCount,
+    attendanceType,
+    partnerName,
+    dietaryRestrictions,
+    message,
+    seatId, // <-- Ici tu dois passer l'id de la place (number ou null)
+  } = body;
+
+  // Petite validation basique
+  if (!name || !phone) {
+    return NextResponse.json({ error: "Nom ou téléphone manquant" }, { status: 400 });
   }
 
+  // Met à jour toutes les infos (seatId nullable !)
   const updatedGuest = await prisma.guest.update({
     where: { id: Number(id) },
-    data: { selectedSeat },
+    data: {
+      name,
+      phone,
+      guestCount: Number(guestCount) || 1,
+      attendanceType,
+      partnerName,
+      dietaryRestrictions,
+      message,
+      seatId: seatId === null || seatId === undefined || seatId === "" ? null : Number(seatId),
+    },
+    include: {
+      seat: { include: { table: true } }
+    }
   });
 
   return NextResponse.json(updatedGuest);

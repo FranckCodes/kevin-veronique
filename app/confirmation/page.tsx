@@ -15,7 +15,7 @@ export default function ConfirmationPage() {
   const [loading, setLoading] = useState(false)
   const [error, setError] = useState("")
 
-  // Charger la liste des places depuis l'API seats
+  // Load seat list from API
   useState(() => {
     fetch("/api/seats")
       .then((res) => res.json())
@@ -35,7 +35,7 @@ export default function ConfirmationPage() {
       setSubmitted(true)
     } else {
       const data = await res.json()
-      setError(data.error || "Erreur lors de la confirmation")
+      setError(data.error || "Error while confirming")
     }
     setLoading(false)
   }
@@ -48,20 +48,20 @@ export default function ConfirmationPage() {
             <motion.div animate={{ scale: [0.8, 1.2, 1] }}>
               <Heart className="w-14 h-14 text-rose-500 fill-rose-200 mx-auto mb-4" />
             </motion.div>
-            <h1 className="text-3xl font-serif mb-2 text-gray-800">Merci {name || "Invité"} !</h1>
-            <p className="text-xl text-gray-600 mb-2">Votre présence est confirmée 🎉</p>
+            <h1 className="text-3xl font-serif mb-2 text-gray-800">Thank you {name || "Guest"}!</h1>
+            <p className="text-xl text-gray-600 mb-2">Your presence is confirmed 🎉</p>
             <div className="my-6 flex justify-center gap-8">
               <div className="flex items-center gap-2 text-gray-700">
                 {guestCount === 1 ? <User /> : <Users />}
-                {guestCount} {guestCount > 1 ? "personnes" : "personne"}
+                {guestCount} {guestCount > 1 ? "guests" : "guest"}
               </div>
               <div className="flex items-center gap-2 text-gray-700">
                 <MapPin />
-                {selectedSeat || "Non spécifiée"}
+                {selectedSeat || "Not specified"}
               </div>
             </div>
             <a href="/" className="inline-block mt-4">
-              <Button>Retour à l'invitation</Button>
+              <Button>Back to invitation</Button>
             </a>
           </CardContent>
         </Card>
@@ -74,11 +74,11 @@ export default function ConfirmationPage() {
         <CardContent>
           <form className="space-y-6" onSubmit={handleSubmit}>
             <h1 className="text-2xl font-serif text-gray-800 text-center mb-4">
-              Confirme ta présence
+              Confirm your attendance
             </h1>
 
             <div>
-              <label className="block text-gray-700 mb-2 font-medium">Nom</label>
+              <label className="block text-gray-700 mb-2 font-medium">Full Name</label>
               <input
                 required
                 className="w-full border rounded p-2"
@@ -88,7 +88,7 @@ export default function ConfirmationPage() {
             </div>
 
             <div>
-              <label className="block text-gray-700 mb-2 font-medium">Nombre de personnes</label>
+              <label className="block text-gray-700 mb-2 font-medium">Number of guests</label>
               <input
                 type="number"
                 min={1}
@@ -100,14 +100,14 @@ export default function ConfirmationPage() {
             </div>
 
             <div>
-              <label className="block text-gray-700 mb-2 font-medium">Place (table/siège)</label>
+              <label className="block text-gray-700 mb-2 font-medium">Seat (table/seat)</label>
               <select
                 required
                 className="w-full border rounded p-2"
                 value={selectedSeat}
                 onChange={e => setSelectedSeat(e.target.value)}
               >
-                <option value="">Choisir une place...</option>
+                <option value="">Select a seat...</option>
                 {seats.map(seat => (
                   <option value={seat.id} key={seat.id}>{seat.label}</option>
                 ))}
@@ -121,7 +121,7 @@ export default function ConfirmationPage() {
               type="submit"
               disabled={loading}
             >
-              {loading ? "Envoi..." : "Confirmer"}
+              {loading ? "Sending..." : "Confirm"}
             </Button>
           </form>
         </CardContent>

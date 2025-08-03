@@ -17,33 +17,33 @@ import { useDeviceDetection } from "@/components/device-detector"
 const carouselImages = [
   {
     src: "/images/couple-photo-1.jpg",
-    alt: "Kevin et Véronique  - Moment romantique",
-    title: "Notre Amour",
-    description: "Un moment tendre devant notre maison",
+    alt: "Kevin and Véronique  - Romantic moment",
+    title: "Our Love",
+    description: "A tender moment in front of our house",
   },
   {
     src: "/images/couple-photo-2.jpg",
-    alt: "Kevin et Véronique  - Photo artistique",
-    title: "Élégance",
-    description: "Notre style en noir et blanc",
+    alt: "Kevin and Véronique  - Artistic photo",
+    title: "Elegance",
+    description: "Our style in black and white",
   },
   {
     src: "/images/couple-photo-3.jpg",
-    alt: "Kevin et Véronique  - Complicité",
-    title: "Complicité",
-    description: "L'amour dans nos regards",
+    alt: "Kevin and Véronique  - Togetherness",
+    title: "Togetherness",
+    description: "Love in our eyes",
   },
   {
     src: "/images/couple-photo-4.jpg",
-    alt: "Kevin et Véronique  - Moments familiaux",
-    title: "En Famille",
-    description: "Nos moments de bonheur partagés",
+    alt: "Kevin and Véronique  - Family moments",
+    title: "Family",
+    description: "Our shared moments of happiness",
   },
   {
     src: "/images/couple-photo-5.jpg",
-    alt: "Kevin et Véronique  - Tendresse",
-    title: "Tendresse",
-    description: "Un baiser plein d'amour",
+    alt: "Kevin and Véronique  - Tenderness",
+    title: "Tenderness",
+    description: "A kiss full of love",
   },
 ]
 
@@ -74,7 +74,7 @@ export default function HomePage() {
 
   const handleSubmit = (e: React.FormEvent) => {
     e.preventDefault()
-    // Rediriger vers la page RSVP avec les données pré-remplies
+    // Redirect to RSVP page with pre-filled data
     const params = new URLSearchParams(formData)
     window.location.href = `/rsvp?${params.toString()}`
   }
@@ -99,33 +99,33 @@ export default function HomePage() {
             </div>
             <div className="text-white">
               <div className="text-xl md:text-2xl font-serif font-bold">K&V</div>
-              <div className="text-xs tracking-widest opacity-80">NOTRE UNION</div>
+              <div className="text-xs tracking-widest opacity-80">OUR UNION</div>
             </div>
           </Link>
 
-          {/* Menu Desktop */}
+          {/* Desktop Menu */}
           <div className="hidden lg:flex space-x-8 text-white/90 text-sm tracking-wide">
             <Link href="/" className="hover:text-white transition-colors">
-              ACCUEIL
+              HOME
             </Link>
             <Link href="/story" className="hover:text-white transition-colors">
-              NOTRE HISTOIRE
+              OUR STORY
             </Link>
             <Link href="/details" className="hover:text-white transition-colors">
-              DÉTAILS
+              DETAILS
             </Link>
             <Link href="/rsvp" className="hover:text-white transition-colors">
               RSVP
             </Link>
             <Link href="/gallery" className="hover:text-white transition-colors">
-              GALERIE
+              GALLERY
             </Link>
             <Link href="/contact" className="hover:text-white transition-colors">
               CONTACT
             </Link>
           </div>
 
-          {/* Menu Mobile */}
+          {/* Mobile Menu Button */}
           <div className="lg:hidden">
             <button
               onClick={() => setMobileMenuOpen(true)}
@@ -191,10 +191,10 @@ export default function HomePage() {
               className="mb-6 md:mb-8"
             >
               <h1 className="text-4xl sm:text-5xl md:text-6xl lg:text-8xl font-serif font-light mb-2 md:mb-4 leading-tight">
-              Kevin & Véronique
+                Kevin & Véronique
               </h1>
               <p className="text-lg sm:text-xl md:text-2xl font-light tracking-wide opacity-90">
-                Célébrons notre union
+                Let's celebrate our union
               </p>
             </motion.div>
 
@@ -206,11 +206,11 @@ export default function HomePage() {
             >
               <div className="flex items-center justify-center lg:justify-start space-x-3 md:space-x-4">
                 <Calendar className="w-4 h-4 md:w-5 md:h-5 opacity-80" />
-                <span className="text-base md:text-lg">07 Août 2025</span>
+                <span className="text-base md:text-lg">30 August 2025</span>
               </div>
               <div className="flex items-center justify-center lg:justify-start space-x-3 md:space-x-4">
                 <Clock className="w-4 h-4 md:w-5 md:h-5 opacity-80" />
-                <span className="text-base md:text-lg">17h00</span>
+                <span className="text-base md:text-lg">5:00 PM</span>
               </div>
               <div className="flex items-center justify-center lg:justify-start space-x-3 md:space-x-4">
                 <MapPin className="w-4 h-4 md:w-5 md:h-5 opacity-80" />
@@ -224,8 +224,7 @@ export default function HomePage() {
               transition={{ delay: 1.2, duration: 0.8 }}
               className="text-base md:text-lg font-light leading-relaxed opacity-90 max-w-md mx-auto lg:mx-0 text-center lg:text-left px-4 lg:px-0"
             >
-              "Nous avons hâte de partager ce moment magique avec vous. Votre présence rendrait notre journée encore
-              plus spéciale."
+              "We can't wait to share this magical moment with you. Your presence will make our day even more special."
             </motion.p>
 
             {/* Mobile CTA Button - Visible only on mobile when form is hidden */}
@@ -241,7 +240,7 @@ export default function HomePage() {
                   className="w-full max-w-sm mx-auto bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white py-4 h-14 text-lg font-medium shadow-2xl hover:shadow-3xl transition-all duration-300 transform hover:scale-105"
                 >
                   <Heart className="w-5 h-5 mr-2 fill-white" />
-                  CONFIRMER MA PRÉSENCE
+                  CONFIRM MY ATTENDANCE
                 </Button>
               </motion.div>
             )}
@@ -252,22 +251,20 @@ export default function HomePage() {
             initial={{ x: 100, opacity: 0 }}
             animate={{ x: showContent ? 0 : 100, opacity: showContent ? 1 : 0 }}
             transition={{ duration: 1, delay: 0.5 }}
-            className={`lg:justify-self-end w-full max-w-md mx-auto lg:mx-0 ${
-              device.isMobile ? "hidden lg:block" : ""
-            }`}
+            className={`lg:justify-self-end w-full max-w-md mx-auto lg:mx-0 ${device.isMobile ? "hidden lg:block" : ""}`}
           >
             <Card className="w-full bg-white/95 backdrop-blur-sm border-0 shadow-2xl">
               <CardContent className="p-6 md:p-8">
                 <div className="text-center mb-6">
-                  <h3 className="text-xl md:text-2xl font-serif text-gray-800 mb-2">Confirmez votre présence</h3>
-                  <p className="text-gray-600 text-sm">Nous avons hâte de vous voir</p>
+                  <h3 className="text-xl md:text-2xl font-serif text-gray-800 mb-2">Confirm your attendance</h3>
+                  <p className="text-gray-600 text-sm">We can't wait to see you</p>
                 </div>
 
                 <form onSubmit={handleSubmit} className="space-y-4">
                   <div>
                     <MobileOptimizedInput
                       name="name"
-                      placeholder="Votre nom complet"
+                      placeholder="Your full name"
                       value={formData.name}
                       onChange={handleInputChange}
                       required
@@ -279,7 +276,7 @@ export default function HomePage() {
                     <MobileOptimizedInput
                       name="phone"
                       type="tel"
-                      placeholder="Téléphone"
+                      placeholder="Phone"
                       value={formData.phone}
                       onChange={handleInputChange}
                       required
@@ -287,11 +284,10 @@ export default function HomePage() {
                     />
                   </div>
 
-
                   <div>
                     <MobileOptimizedTextarea
                       name="message"
-                      placeholder="Un petit mot pour nous..."
+                      placeholder="A little note for us..."
                       value={formData.message}
                       onChange={handleInputChange}
                       rows={3}
@@ -303,7 +299,7 @@ export default function HomePage() {
                     type="submit"
                     className="w-full bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white py-3 h-12 text-base md:text-lg font-medium shadow-lg hover:shadow-xl transition-all duration-300"
                   >
-                    CONFIRMER MA PRÉSENCE
+                    CONFIRM MY ATTENDANCE
                   </Button>
                 </form>
 
@@ -347,8 +343,8 @@ export default function HomePage() {
                   {/* Header with close button */}
                   <div className="flex items-center justify-between mb-6">
                     <div className="text-center flex-1">
-                      <h3 className="text-xl font-serif text-gray-800 mb-1">Confirmez votre présence</h3>
-                      <p className="text-gray-600 text-sm">Nous avons hâte de vous voir</p>
+                      <h3 className="text-xl font-serif text-gray-800 mb-1">Confirm your attendance</h3>
+                      <p className="text-gray-600 text-sm">We can't wait to see you</p>
                     </div>
                     <button
                       onClick={handleMobileFormToggle}
@@ -363,7 +359,7 @@ export default function HomePage() {
                     <div>
                       <MobileOptimizedInput
                         name="name"
-                        placeholder="Votre nom complet"
+                        placeholder="Your full name"
                         value={formData.name}
                         onChange={handleInputChange}
                         required
@@ -375,7 +371,7 @@ export default function HomePage() {
                       <MobileOptimizedInput
                         name="phone"
                         type="tel"
-                        placeholder="Téléphone"
+                        placeholder="Phone"
                         value={formData.phone}
                         onChange={handleInputChange}
                         required
@@ -383,11 +379,10 @@ export default function HomePage() {
                       />
                     </div>
 
-
                     <div>
                       <MobileOptimizedTextarea
                         name="message"
-                        placeholder="Un petit mot pour nous..."
+                        placeholder="A little note for us..."
                         value={formData.message}
                         onChange={handleInputChange}
                         rows={3}
@@ -400,7 +395,7 @@ export default function HomePage() {
                       className="w-full bg-gradient-to-r from-rose-500 to-pink-600 hover:from-rose-600 hover:to-pink-700 text-white py-4 h-14 text-lg font-medium shadow-lg hover:shadow-xl transition-all duration-300"
                     >
                       <Heart className="w-5 h-5 mr-2 fill-white" />
-                      CONFIRMER MA PRÉSENCE
+                      CONFIRM MY ATTENDANCE
                     </Button>
                   </form>
 
@@ -453,7 +448,7 @@ export default function HomePage() {
 
       {/* Footer Copyright */}
       <div className="absolute bottom-2 md:bottom-4 left-1/2 transform -translate-x-1/2 z-40 px-4">
-        <p className="text-white/60 text-xs md:text-sm text-center">© 2025 franckCodes. Tous droits réservés.</p>
+        <p className="text-white/60 text-xs md:text-sm text-center">© 2025 franckCodes. All rights reserved.</p>
       </div>
 
       {/* Mobile Menu */}
