@@ -93,7 +93,7 @@ export default function GuestEditDialog({ open, guest, tables, onClose, onSave }
 
   return (
     <Dialog open={open} onOpenChange={o => !o && onClose()}>
-      <DialogContent className="max-w-lg">
+        <DialogContent className="max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle>Éditer l'invité</DialogTitle>
         </DialogHeader>
