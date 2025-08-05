@@ -115,7 +115,7 @@ export function PDFGenerator({ guest, onGenerated }: PDFGeneratorProps) {
               <div className="w-12 h-px bg-rose-300"></div>
             </div>
             <p className="text-xl font-light">30th of August, Saturday</p>
-            <p className="text-lg mt-2">Chic Events DFW, Texas</p>
+            <p className="text-lg mt-2">Chic Events DFW, 514 Harwood rd Hurst, Hurst, TX</p>
           </div>
 
           {/* Guest specific information */}

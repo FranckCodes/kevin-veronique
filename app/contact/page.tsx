@@ -119,7 +119,7 @@ export default function ContactPage() {
                   <MapPin className="w-6 h-6 text-rose-600" />
                   <div>
                     <h4 className="font-semibold text-gray-800">Address</h4>
-                    <p className="text-gray-600">Texas, USA</p>
+                    <p className="text-gray-600">514 Harwood rd Hurst, Hurst, TX, USA</p>
                     <p className="text-gray-600">Available for appointment</p>
                   </div>
                 </div>
