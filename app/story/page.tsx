@@ -167,7 +167,7 @@ export default function StoryPage() {
                 </p>
                 <div className="flex items-center justify-center mt-6">
                   <MapPin className="w-5 h-5 mr-2" />
-                  <span>Chic Events DFW, Texas</span>
+                  <span>Chic Events DFW, 514 Harwood rd Hurst, Hurst, TX</span>
                 </div>
               </CardContent>
             </Card>

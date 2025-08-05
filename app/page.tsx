@@ -214,7 +214,7 @@ export default function HomePage() {
               </div>
               <div className="flex items-center justify-center lg:justify-start space-x-3 md:space-x-4">
                 <MapPin className="w-4 h-4 md:w-5 md:h-5 opacity-80" />
-                <span className="text-base md:text-lg text-center lg:text-left">Chic Events DFW, Texas</span>
+                <span className="text-base md:text-lg text-center lg:text-left">Chic Events DFW, 514 Harwood rd Hurst, Hurst, TX</span>
               </div>
             </motion.div>
 

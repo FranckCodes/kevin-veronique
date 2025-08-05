@@ -60,7 +60,7 @@ export default function DetailsPage() {
                   <MapPin className="w-10 h-10 md:w-12 md:h-12 mb-4" />
                   <h3 className="text-xl md:text-2xl font-serif mb-2">Venue</h3>
                   <p className="text-base md:text-lg">Chic Events DFW</p>
-                  <p className="text-sm opacity-90">Texas, USA</p>
+                  <p className="text-sm opacity-90">514 Harwood rd Hurst, Hurst, TX, USA</p>
                 </div>
               </div>
             </CardContent>
@@ -83,7 +83,7 @@ export default function DetailsPage() {
                 <div>
                   <h4 className="text-xl font-semibold text-gray-800 mb-4">An Exceptional Venue</h4>
                   <p className="text-gray-600 leading-relaxed mb-4">
-                    The Chic Events DFW, a beautiful venue located in the heart of Texas, will host our celebration. With its elegant gardens and refined architecture, this historic place offers a romantic and unique setting for our big day.
+                    The Chic Events DFW, a beautiful venue located in the heart of 514 Harwood rd Hurst, Hurst, TX, will host our celebration. With its elegant gardens and refined architecture, this historic place offers a romantic and unique setting for our big day.
                   </p>
                   <div className="space-y-2 text-gray-600">
                     <div className="flex items-center">
